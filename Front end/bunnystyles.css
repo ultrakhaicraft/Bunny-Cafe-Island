@@ -43,6 +43,37 @@ body{
     border-radius: 10px;
 }
 
+
+.main_content{
+    height: fit-content;
+    margin-top: 50px;
+}
+
+.filter_menu{
+    width: 300px;
+    margin-left: 50px;
+    padding: 5px;
+    background-color:white;
+    display: flex;
+    align-items: start;
+    overflow: hidden;
+    border: 1px solid;
+    height: fit-content;
+}
+
+.bunny_showcase{
+    position: relative;
+    left: 10%;
+}
+
+.showcase_card{
+    margin: 24px 24px 24px 0;
+    display: inline-block;
+    width: 300px;
+    height: 400px;
+    background-color: white;
+}
+
 footer{
     background-color: #b0d7ff;
     height: 269px;
