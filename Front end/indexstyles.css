@@ -1,0 +1,148 @@
+body{
+    background: #efefef;
+}
+
+.Navigation{
+    display: flex;
+    align-items: center;
+    background-color: #b0d7ff;
+    position: relative;
+    height: 93px;
+}
+
+.nav{
+    position: absolute;
+    right: 100px;
+}
+
+.Navigation .icon{
+    margin-left: 50px;
+    height: 80px;
+    width: 80px;
+}
+
+.Navigation a{
+    font-size: 20px;
+    color:white;
+}
+
+
+.Navigation a:hover{
+    font-size: 20px;
+    color: #e19e67;
+}
+
+.Navigation li:hover{
+    font-size: 20px;
+    background-color: white;
+}
+
+.Navigation li{
+    background-color: #e19e67;
+    margin: 10px;
+    border-radius: 10px;
+}
+
+.Hero{
+    height: 491px;
+    background-image: url(asset/index/images/AboutUs.png);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    
+}
+
+.Hero .Title{
+    position: relative;
+    top: 10%;
+}
+
+.Hero .Button{
+    position: relative;
+    bottom:10%;
+    
+}
+
+.Hero button{
+    margin-right: 50px;
+    height: 60px;
+    border-radius: 25px;
+    border: 0;
+    background-color: #e19e67; 
+}
+
+.Hero button:hover{
+    background-color: white;
+    color: #e19e67;
+}
+
+.About_Us{
+    
+    height: 600px;
+}
+
+.About_Us img{
+    position: relative;
+    left: 10%;
+    top: 20%;
+    height: 400px;
+    width: 700px;
+}
+
+.About_Us .Text{
+    position: relative;
+    top: 20%;
+}
+
+.Event_News{
+    height: 600px;
+}
+
+.Event_News h2{
+    margin-bottom: 20px;
+}
+
+.Event h2{
+    position: relative;
+    left: 10%;
+}
+.Event p{
+    position: relative;
+    height: 400px;
+    width: 700px;
+    left: 10%;
+    top: 20%;
+    background-color: rgb(255, 255, 255);
+}
+
+.News{
+    position: relative;
+}
+
+.News .item{
+    position: relative;
+    left: -3%;
+    height: 120px;
+    margin-bottom: 20px;
+    background-color:azure;
+    list-style: none;
+}
+
+footer{
+    background-color: #b0d7ff;
+    height: 269px;
+}
+
+.FooterBox  {
+    text-align: left;
+    padding: 30px 0 0 30px;
+}
+
+.FooterBox .left {
+    width: 30%;
+}
+
+.FooterBox .right {
+    width: 70%;
+}

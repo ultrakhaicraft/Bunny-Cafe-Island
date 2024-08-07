@@ -4,64 +4,82 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Bunny Island Cafe</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+        <link href="indexstyles.css" rel="stylesheet" type="text/css">
     </head>
     <body>
-        <nav>
-            <ul>
-                <li> Home </li>
-                <li> About us </li>
-                <li> Menu </li>
-                <li> Bunny </li>
+        <nav class="Navigation col-sm-12 col-lg-12">
+            <img class="icon" src="asset/index/images/bunny.png" alt="Bunny icon by Dooder from Flaticon">
+            <ul class="nav">
+                <li class="nav-item">  
+                    <a class="nav-link active" href="index.html">Home</a>
+                </li>
+                <li class="nav-item "> 
+                    <a class="nav-link" href="about_us.html">About us</a>
+                </li>
+                <li class="nav-item "> 
+                    <a class="nav-link" href="menu.html">Menu</a>
+                </li>
+                <li class="nav-item "> 
+                    <a class="nav-link" href="bunny.html">Bunny </a>
+                </li>
             </ul>
         </nav>
         <main>
-            <div>
-            <h1>Want to drink cafe and play with the bunnies ? Want to <strong>adopt</strong> a bunny ?</h1>
-            <p>Bunny cafe island is for you</p>
+            <div class="Hero row">
+                <div class="Title">
+                <h1>Do you like bunny ? You want to chill with the bunnies ? Want to take a bunny home ?</h1>
+                <h2>Bunny Island Cafe is for you</h2>
+                </div>
+                <div class="Button">
+                    <button type="button" class="btn btn-primary">Reserve a table </button>
+                    <button type="button" class="btn btn-secondary">Adopt a bunny </button>
+                </div>
             </div>
-            <section>
-                <div>
-                    <h2>Feel free to join us</h2>
-                    <!--TODO: Reservation and Adoption-->
-                    <button>Reserve a table here</button>
-                    <button>Adopt a bunny here</button>
+            <div class="About_Us row">             
+                    <div class="Image col-sm-12 col-lg-6">
+                        <img class="" src="asset/index/images/AboutUs.png" alt="placeholder">
+                    </div>                   
+                    <div class="Text col-sm-12 col-lg-6">
+                        <h1>Our cafe</h1>
+                        <p>Bunny Island Cafe is a place where you can relax and have fun with the our shop raised bunnies</p>
+                    </div>              
+            </div>
+            <div class="Event_News row">
+                <div class="Event col-sm-12 col-lg-6">
+                    <section>
+                        <h2>Event</h2>
+                        <p>Event_info</p>
+                    </section>  
                 </div>
-            </section>
-            <section>
-                <div>
-                    <h2>A Bunny playground</h2>
-                    <p>A refreshing cafe where you can meet and play with the bunnies</p>
-                    <img src="" alt="cafe area">
-                </div>
-            </section>
-            <section>
-                <div>
-                    <h2>A Bunny for you</h2>
-                    <p>We also can provide you bunny adoption</p>
-                    <img src="" alt="bunny and people">
-                </div>
-            </section>
-            <section>
-                <div>
-                    <h2>Service</h2>
-                    <ul>
-                        <li> Cakes, Ice cream and pastries </li>
-                        <li> Cafe, Tea and more </li>
-                        <li> Bunny, Lot of Bunnies </li>
-                    </ul>
-                    <p>Check out our menu here</p>                  
-                </div>
-            </section>            
+                <div class="News col-sm-12 col-lg-6">
+                    <section>
+                        <h2>News</h2>
+                        <ul>
+                            <li class="item">News 1</li>
+                            <li class="item">News 2</li>
+                            <li class="item">News 3</li>                           
+                        </ul>
+                    </section>  
+                </div> 
+            </div>             
         </main>
     </body>
     <footer>
-    <h2>Contact us</h2>
-    <ul>
-        <li>Phone number: </li>
-        <li>Facebook: </li>
-        <li>Twitter: </li>
-    </ul>
-    <h2>Address</h2>
-    <p>Address placeholder</p>          
+        <div class="FooterBox row">
+            <div class="left col-6">
+                <h2>Contact us</h2>
+                <ul>
+                    <li>Phone number: </li>
+                    <li>Facebook: </li>
+                    <li>Twitter: </li>
+                </ul>
+            </div>
+            <div class="right col-6">
+                <h2>Address</h2>
+                <p>Address placeholder</p>  
+            </div>
+        </div>        
     </footer>
 </html>
