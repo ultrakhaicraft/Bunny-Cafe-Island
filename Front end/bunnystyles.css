@@ -1,43 +1,74 @@
+/* ------------------ Global ------------------ */
+
+*{
+    box-sizing: border-box;
+}
+
 body{
     background: #efefef;
+    
+    font-size: 16px;
+    font-family: sans-serif, Helvetica, Arial;
+    margin: 0;
 }
 
-.Navigation{
+.sr-only{
+    display: none;
+}
+
+/* ------------------ Navigation ------------------ */
+.navigation{
+    width: 100%;
     display: flex;
+    flex-direction: row;
     align-items: center;
+    justify-content: space-between;
     background-color: #b0d7ff;
-    position: relative;
-    height: 93px;
+    height: 15vh;
+    padding: 0 20px;
 }
 
-.nav{
-    position: absolute;
-    right: 100px;
-}
 
-.Navigation .icon{
+
+.navbar-brand{
     margin-left: 50px;
     height: 80px;
     width: 80px;
 }
 
-.Navigation a{
-    font-size: 20px;
+.collapse.navbar-collapse {
+    justify-content: flex-end;
+}
+
+.navbar-toggler{
+    margin-right: 30px;
+}
+
+.nav-item a{
+    line-height: 100%;
     color:white;
 }
 
 
-.Navigation a:hover{
-    font-size: 20px;
+.nav-item a:hover{
+    
     color: #e19e67;
 }
 
-.Navigation li:hover{
-    font-size: 20px;
+.nav-item:hover{
+    
     background-color: white;
 }
 
-.Navigation li{
+.nav-item{
+    width: 100px;
+    max-width: 150px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+    flex-direction: row;
+    height: 50px;
     background-color: #e19e67;
     margin: 10px;
     border-radius: 10px;
@@ -54,10 +85,8 @@ body{
     margin-left: 50px;
     padding: 5px;
     background-color:white;
-    display: flex;
-    align-items: start;
-    overflow: hidden;
     border: 1px solid;
+    overflow: hidden;
     height: fit-content;
 }
 
@@ -66,28 +95,60 @@ body{
     left: 10%;
 }
 
+.showcase_grid{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
 .showcase_card{
     margin: 24px 24px 24px 0;
-    display: inline-block;
     width: 300px;
     height: 400px;
     background-color: white;
 }
+
+/* ------------------ Footer ------------------ */
 
 footer{
     background-color: #b0d7ff;
     height: 269px;
 }
 
+footer h2{
+    font-weight: bold;
+}
+
 .FooterBox  {
     text-align: left;
     padding: 30px 0 0 30px;
+    margin-left: 10px;
 }
 
 .FooterBox .left {
     width: 30%;
+    
 }
 
 .FooterBox .right {
     width: 70%;
+}
+
+.contact-list{
+    padding: 0;
+}
+
+.contact-list .item{
+    list-style: none;
+    
+}
+
+.contact-list a{
+    text-decoration: none;
+    color: #0f3680;
+}
+
+.contact-list a:hover{
+    text-decoration: underline;
+    color: #f3f8ff;
 }

@@ -1,68 +1,106 @@
+
+/* ------------------ Global ------------------ */
+
+*{
+    box-sizing: border-box;
+}
+
 body{
     background: #efefef;
+    
+    font-size: 16px;
+    font-family: sans-serif, Helvetica, Arial;
+    margin: 0;
 }
 
-.Navigation{
+.sr-only{
+    display: none;
+}
+
+/* ------------------ Navigation ------------------ */
+.navigation{
+    width: 100%;
     display: flex;
+    flex-direction: row;
     align-items: center;
+    justify-content: space-between;
     background-color: #b0d7ff;
-    position: relative;
-    height: 93px;
+    height: 15vh;
+    padding: 0 20px;
 }
 
-.nav{
-    position: absolute;
-    right: 100px;
-}
 
-.Navigation .icon{
+
+.navbar-brand{
     margin-left: 50px;
     height: 80px;
     width: 80px;
 }
 
-.Navigation a{
-    font-size: 20px;
+.collapse.navbar-collapse {
+    justify-content: flex-end;
+}
+
+.navbar-toggler{
+    margin-right: 30px;
+}
+
+.nav-item a{
+    line-height: 100%;
     color:white;
 }
 
 
-.Navigation a:hover{
-    font-size: 20px;
+.nav-item a:hover{
+    
     color: #e19e67;
 }
 
-.Navigation li:hover{
-    font-size: 20px;
+.nav-item:hover{
+    
     background-color: white;
 }
 
-.Navigation li{
+.nav-item{
+    width: 100px;
+    max-width: 150px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+    flex-direction: row;
+    height: 50px;
     background-color: #e19e67;
     margin: 10px;
     border-radius: 10px;
 }
 
+/* ------------------ Hero ------------------ */
+
 .Hero{
-    height: 491px;
+    
+    height: 80vh;
     background-image: url(asset/index/images/AboutUs.png);
+    background-size: cover;
+    background-position: center;
     display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
     text-align: center;
     
 }
 
-.Hero .Title{
-    position: relative;
-    top: 10%;
+
+.Title{
+    margin-bottom: 60px;
 }
 
-.Hero .Button{
-    position: relative;
-    bottom:10%;
-    
+.Title h1{
+    font-weight: bold;
 }
+
 
 .Hero button{
     margin-right: 50px;
@@ -77,72 +115,127 @@ body{
     color: #e19e67;
 }
 
-.About_Us{
-    
-    height: 600px;
-}
+/* ------------------ About Us ------------------ */
 
-.About_Us img{
-    position: relative;
-    left: 10%;
-    top: 20%;
-    height: 400px;
+.About_Us{
+    margin: 70px 0;
+    padding: 10px;
+    height: 60vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.About_Us .container{
+    
+    height: auto;
     width: 700px;
+    
+}
+.About_Us img{
+    width: 80%;
+    height: auto;
 }
 
 .About_Us .Text{
-    position: relative;
-    top: 20%;
+    
+    padding: 0 30px;
+    height: auto;
+    
 }
 
+
+
+/* ------------------ Event and News ------------------ */
 .Event_News{
-    height: 600px;
+    margin: 70px 0;
+    height: 80vh;
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
 .Event_News h2{
     margin-bottom: 20px;
 }
 
-.Event h2{
-    position: relative;
-    left: 10%;
-}
-.Event p{
-    position: relative;
-    height: 400px;
+.Event .container{
+    
+    height: auto;
     width: 700px;
-    left: 10%;
-    top: 20%;
-    background-color: rgb(255, 255, 255);
+    
 }
 
-.News{
-    position: relative;
+.Event img{
+    height: 50%;
+    width: 80%;
+    object-fit: cover;
 }
+
+.Event caption{
+    height: 50%;
+    width: 100%;
+}
+
+.Event caption h3,p{
+    margin-top: 10px;
+}
+
+.News ul{
+    padding: 0;
+}
+
 
 .News .item{
-    position: relative;
-    left: -3%;
-    height: 120px;
-    margin-bottom: 20px;
+    
+    height: auto;
+    margin-top: 10px;
     background-color:azure;
     list-style: none;
+    padding: 10px;
 }
+
+/* ------------------ Footer ------------------ */
 
 footer{
     background-color: #b0d7ff;
     height: 269px;
 }
 
+footer h2{
+    font-weight: bold;
+}
+
 .FooterBox  {
     text-align: left;
     padding: 30px 0 0 30px;
+    margin-left: 10px;
 }
 
 .FooterBox .left {
     width: 30%;
+    
 }
 
 .FooterBox .right {
     width: 70%;
+}
+
+.contact-list{
+    padding: 0;
+}
+
+.contact-list .item{
+    list-style: none;
+    
+}
+
+.contact-list a{
+    text-decoration: none;
+    color: #0f3680;
+}
+
+.contact-list a:hover{
+    text-decoration: underline;
+    color: #f3f8ff;
 }
