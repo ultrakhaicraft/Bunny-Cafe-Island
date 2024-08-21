@@ -1,10 +1,10 @@
-package com.BunnyIslandCafe;
+package BunnyCafeIsland;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class BunnyIslandCafeApplicationTests {
+class BunnyCafeIslandApplicationTests {
 
 	@Test
 	void contextLoads() {
