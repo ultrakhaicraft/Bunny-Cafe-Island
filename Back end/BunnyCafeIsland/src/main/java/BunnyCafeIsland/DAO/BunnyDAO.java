@@ -13,11 +13,12 @@ import java.util.List;
 @Repository
 public class BunnyDAO implements IBunnyDAO {
 
-    public EntityManager entityManager;
+    
+    private EntityManager entityManager;
 
     @Autowired
-    public BunnyDAO(EntityManager entityManager){
-        this.entityManager=entityManager;
+    public BunnyDAO(EntityManager entityManager) {
+        this.entityManager = entityManager;
     }
 
     @Override
