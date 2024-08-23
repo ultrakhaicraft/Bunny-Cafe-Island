@@ -6,10 +6,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import BunnyCafeIsland.DAO.BunnyDAO;
 import BunnyCafeIsland.Entity.Bunny;
 import BunnyCafeIsland.Enums.AvailabilityStatus;
 import BunnyCafeIsland.Enums.Gender;
+import BunnyCafeIsland.Repository.BunnyDAO;
 import jakarta.persistence.EntityManager;
 
 @Service
@@ -38,6 +38,7 @@ public class BunnyService {
 
 	}
 
+	//TODO
 	public void updateBunny() {
 		Bunny newBun =bunnyDAO.findById(1);
 		if(newBun==null) {
@@ -72,6 +73,8 @@ public class BunnyService {
 		return tempBunny;
 	}
 
+
+	//TODO
 	public void createBunny(){
 		System.out.println("Create a bunny here...");
 		Date tempDate = new Date();

@@ -1,8 +1,8 @@
 package BunnyCafeIsland;
 
-import BunnyCafeIsland.DAO.BunnyDAO;
 import BunnyCafeIsland.Enums.AvailabilityStatus;
 import BunnyCafeIsland.Enums.Gender;
+import BunnyCafeIsland.Repository.BunnyDAO;
 import BunnyCafeIsland.Entity.Bunny;
 
 import org.springframework.boot.CommandLineRunner;
@@ -15,7 +15,7 @@ import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
-@SpringBootApplication(exclude = SecurityAutoConfiguration.class)
+@SpringBootApplication      /*(exclude = SecurityAutoConfiguration.class)*/
 public class BunnyCafeIslandApplication {
 
 	public static void main(String[] args) {

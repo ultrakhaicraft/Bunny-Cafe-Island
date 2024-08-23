@@ -1,4 +1,4 @@
-package BunnyCafeIsland.DAO;
+package BunnyCafeIsland.Repository;
 
 import BunnyCafeIsland.Enums.AvailabilityStatus;
 import BunnyCafeIsland.Entity.Bunny;
@@ -47,8 +47,8 @@ public class BunnyDAO implements IBunnyDAO {
 
     @Override
     public List<Bunny> findByName(String name) {
-        TypedQuery<Bunny> result = entityManager.createQuery("FROM Bunny WHERE name=:nameKeyword", Bunny.class);
-        result.setParameter("nameKeyword",name);
+        TypedQuery<Bunny> result = entityManager.createQuery("FROM Bunny WHERE name LIKE:nameKeyword", Bunny.class);
+        result.setParameter("nameKeyword","%"+name+"%");
         return result.getResultList();
     }
 

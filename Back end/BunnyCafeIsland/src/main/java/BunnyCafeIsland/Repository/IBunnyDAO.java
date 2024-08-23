@@ -1,4 +1,4 @@
-package BunnyCafeIsland.DAO;
+package BunnyCafeIsland.Repository;
 
 import BunnyCafeIsland.Entity.Bunny;
 
