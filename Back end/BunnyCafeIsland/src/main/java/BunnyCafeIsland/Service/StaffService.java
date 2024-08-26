@@ -2,6 +2,7 @@ package BunnyCafeIsland.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,53 +11,62 @@ import org.springframework.transaction.annotation.Transactional;
 import BunnyCafeIsland.Entity.Staff;
 import BunnyCafeIsland.Enums.AvailabilityStatus;
 import BunnyCafeIsland.Enums.Gender;
-import BunnyCafeIsland.Repository.StaffDAO;
+import BunnyCafeIsland.Enums.StaffStatus;
+import BunnyCafeIsland.Exception.BadRequestException;
+import BunnyCafeIsland.Repository.StaffRepository;
+
 
 
 @Service
 public class StaffService {
 
-    private StaffDAO staffDAO;
+    private StaffRepository staffRepository;
 
 	@Autowired
-	public StaffService(StaffDAO staffDAO){
-		this.staffDAO=staffDAO;
+	public StaffService(StaffRepository staffRepository){
+		this.staffRepository=staffRepository;
 	}	
 
-	@Transactional
+	
 	public Staff save(Staff aStaff){
-		return staffDAO.save(aStaff);
+		return staffRepository.save(aStaff);
 	}
 
-	@Transactional
+	
     public void softRemove(int id){
-		Staff newBun =getStaffById(id);
-		if(newBun==null) {
-			System.out.println("Bunny not found!!, Exiting soft remove");
+		Staff newStaff =getStaffById(id);
+		if(newStaff==null) {
+			System.out.println("Staff not found!!, Exiting soft remove");
 			return;
 		}
-		staffDAO.softRemove(newBun);
-		System.out.println("New bunny info"+newBun);
+		newStaff.setStatus(StaffStatus.Inactive);
+		staffRepository.save(newStaff);
+		System.out.println("New Staff info"+newStaff);
 	}
 
-	@Transactional
+	
 	public void hardRemove(int id){
-		staffDAO.hardRemove(id);
+		staffRepository.deleteById(id);
 
 	}
 
 
 	public List<Staff> getAllStaffs() {
-		List<Staff> staffs = staffDAO.findAll();
+		List<Staff> staffs = staffRepository.findAll();
 		if(staffs==null) System.out.println("Can't get all staffs");
 		return staffs;
 	}
 
 	
 	public Staff getStaffById(int id) {
-		Staff tempStaff =staffDAO.findById(id);
-		if(tempStaff==null) System.out.println("Staff not found!!");
-		return tempStaff;
+		Optional<Staff> result =staffRepository.findById(id);
+		Staff aStaff=null;
+		if(result.isPresent()) {
+			aStaff=result.get();
+		}else{
+			throw new BadRequestException( "Staff not found - ID: "+id);
+		}
+		return aStaff;
 	}
 
 

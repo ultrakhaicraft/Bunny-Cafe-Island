@@ -18,6 +18,8 @@ import BunnyCafeIsland.Service.StaffService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 
@@ -50,6 +52,12 @@ public class StaffAPI {
 
         return aStaff;
     }
+
+    @GetMapping("/login")
+    public String getMethodName(@RequestParam String email, @RequestParam String password) {
+        return new String();
+    }
+    
 
     @PostMapping("/staffs")
     public Staff addStaff(@RequestBody Staff aStaff) {

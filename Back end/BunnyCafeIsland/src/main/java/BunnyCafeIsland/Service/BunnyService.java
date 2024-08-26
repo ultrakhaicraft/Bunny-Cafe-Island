@@ -2,90 +2,74 @@ package BunnyCafeIsland.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import BunnyCafeIsland.Entity.Bunny;
+
 import BunnyCafeIsland.Enums.AvailabilityStatus;
-import BunnyCafeIsland.Enums.Gender;
-import BunnyCafeIsland.Repository.BunnyDAO;
-import jakarta.persistence.EntityManager;
+
+import BunnyCafeIsland.Exception.BadRequestException;
+
+import BunnyCafeIsland.Repository.BunnyRepository;
+
 
 @Service
 public class BunnyService {
 
 	
-    private BunnyDAO bunnyDAO;
+    private BunnyRepository bunnyRepository;
 
 	@Autowired
-	public BunnyService(BunnyDAO bunnyDAO){
-		this.bunnyDAO=bunnyDAO;
+	public BunnyService(BunnyRepository bunnyRepository){
+		this.bunnyRepository=bunnyRepository;
 	}
 
-    public void softRemove(int id){
-		Bunny newBun =getBunnyById(id);
-		if(newBun==null) {
-			System.out.println("Bunny not found!!, Exiting soft remove");
-			return;
-		}
-		bunnyDAO.softRemove(newBun);
-		System.out.println("New bunny info"+newBun);
-	}
+	
 
-	public void hardRemove(int id){
-		bunnyDAO.hardRemove(id);
-
-	}
-
-	//TODO
-	public void updateBunny() {
-		Bunny newBun =bunnyDAO.findById(1);
-		if(newBun==null) {
-			System.out.println("Bunny not found!!, Exiting update");
-			return;
-		}
-
-		System.out.println("Bunny found !!, Executing update");
-		System.out.println("Set name to Hikari");
-		newBun.setName("Hikari");
-
-		bunnyDAO.update(newBun);
-		System.out.println("Update done");
-		System.out.println("New bunny info"+newBun);
+	public List<Bunny> getAllBunny() {
+		return bunnyRepository.findAll();
 	}
 
 	public List<Bunny> getBunnyByBreed(String breed) {
-		List<Bunny> bunnies = bunnyDAO.findByBreed(breed);
-		return bunnies;
-	}
-
-	public List<Bunny> getAllBunny() {
-		List<Bunny> bunnies = bunnyDAO.findAll();
-		if(bunnies==null) System.out.println("Can't get all bunnies");
-		return bunnies;
+		List<Bunny> result = bunnyRepository.findByBreed(breed);
+		return result;
 	}
 
 	
 	public Bunny getBunnyById(int id) {
-		Bunny tempBunny =bunnyDAO.findById(id);
-		if(tempBunny==null) System.out.println("Bunny not found!!");
-		return tempBunny;
+		Optional<Bunny> result =bunnyRepository.findById(id);
+		Bunny aBunny=null;
+		if(result.isPresent()) {
+			aBunny=result.get();
+		}else{
+			throw new BadRequestException( "Bunny not found - ID: "+id);
+
+		}
+		return aBunny;
 	}
 
+	public Bunny save(Bunny aBunny){
+        return bunnyRepository.save(aBunny);
+    }
 
-	//TODO
-	public void createBunny(){
-		System.out.println("Create a bunny here...");
-		Date tempDate = new Date();
-		Bunny tempBunny= new Bunny("Peppy","Mini Lop", Gender.Female,4, "Energetic","Peppy.png", AvailabilityStatus.Available,"Healthy",tempDate);
 
-		System.out.println("Saving bunny here...");
-		bunnyDAO.save(tempBunny);
-
-		System.out.println("Confirm bunny creation here...");
-		Bunny checked =getBunnyById(tempBunny.getId());
-		if(checked==null) System.out.println("Bunny not found!!");
-		System.out.println("Bunny found: "+ checked);
+    public Bunny changeStatus(int id, AvailabilityStatus status){
+		Bunny newBun =getBunnyById(id);
+		if(newBun==null) {
+			throw new BadRequestException( "Bunny not found, exiting change status - ID: "+id);
+		}
+		newBun.setAvailabilityStatus(status);
+		save(newBun);
+		return newBun;
 	}
+
+	public void deleteBunnyById(int id){
+        bunnyRepository.deleteById(id);
+    }
+
+
+	
 }
