@@ -1,46 +1,52 @@
-/*package BunnyCafeIsland.API;
+package BunnyCafeIsland.API;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import BunnyCafeIsland.DTO.AuthenticationRequest;
+import BunnyCafeIsland.DTO.AuthenticationResponse;
+import org.apache.coyote.Response;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
 
 import BunnyCafeIsland.DTO.LoginRequest;
 import BunnyCafeIsland.Service.AuthenticationService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-
 
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/auth")
 public class AuthenticationAPI {
 
-    private AuthenticationService authenticationService;
+    private final AuthenticationService authenticationService;
 
     @Autowired
     public AuthenticationAPI(AuthenticationService authenticationService) {
         this.authenticationService = authenticationService;
     }
 
-
-
-    @PostMapping("/login")
-    public String postMethodName(@RequestBody LoginRequest loginRequest) {
-            boolean isAuthenticated = authenticationService.authenticatedUser(loginRequest.getEmail(), loginRequest.getPassword());
-            
-            if(isAuthenticated){
-                return "Login Success";
-            }else{
-                return "Bad credential";
-            }
+    //Login
+    @PostMapping("/authenticate")
+    public ResponseEntity<AuthenticationResponse> authenticate(
+            @RequestBody AuthenticationRequest request
+            ){
+        return ResponseEntity.ok(authenticationService.authenticate(request));
     }
 
+    /*
+    @PostMapping("/login")
+    public ResponseEntity<?> postMethodName(@RequestBody LoginRequest loginRequest) {
+            boolean isAuthenticated = authenticationService.authenticatedUser(loginRequest.getEmail(), loginRequest.getPassword());
+
+        if (isAuthenticated) {
+            return ResponseEntity.ok("{\"message\": \"Login successful\"}");
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("{\"message\": \"Bad credentials\"}");
+        }
+    }
+    */
     
         
         
     
 }
-*/

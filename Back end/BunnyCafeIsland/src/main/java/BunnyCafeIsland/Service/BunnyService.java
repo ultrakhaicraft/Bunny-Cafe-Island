@@ -1,9 +1,13 @@
 package BunnyCafeIsland.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import BunnyCafeIsland.Entity.MedicalRecord;
+import BunnyCafeIsland.Enums.Gender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,8 +23,9 @@ import BunnyCafeIsland.Repository.BunnyRepository;
 @Service
 public class BunnyService {
 
-	
-    private BunnyRepository bunnyRepository;
+	//Intention DAO/Repository: Bunny and Medical Record
+
+    private final BunnyRepository bunnyRepository;
 
 	@Autowired
 	public BunnyService(BunnyRepository bunnyRepository){
@@ -71,5 +76,78 @@ public class BunnyService {
     }
 
 
-	
+	/*
+	Not in a scope, just a test run
+	*/
+	public void addBunnyWithMedicalRecordExample() throws ParseException {
+		try {
+
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			Date date1 = dateFormat.parse("2024-10-03");
+			Date date2 = dateFormat.parse("2024-08-21");
+			Date date3 = dateFormat.parse("2024-03-15");
+
+			Bunny bunny1 = new Bunny(
+					"Fluffy",
+					"Lop",
+					Gender.Female,
+					2,
+					"A very playful and friendly bunny.",
+					"https://example.com/images/fluffy.jpg",
+					AvailabilityStatus.Available,
+					"Healthy",
+					new Date(),
+					null
+			);
+
+
+
+			Bunny bunny2 = new Bunny(
+					"Snowball",
+					"Dutch",
+					Gender.Male,
+					1,
+					"A calm and gentle bunny.",
+					"https://example.com/images/snowball.jpg",
+					AvailabilityStatus.Available,
+					"Healthy",
+					date3,
+					null
+			);
+
+			MedicalRecord record1 = new MedicalRecord(
+					new Date(),
+					"Vaccination and general checkup",
+					"Administered vaccines and general health inspection",
+					"Happy Tails Veterinary Clinic"
+
+			);
+
+			MedicalRecord record2 = new MedicalRecord(
+					date2,
+					"Dental care and grooming",
+					"Trimmed overgrown teeth and nails",
+					"Bunny Wellness Center"
+
+			);
+
+			MedicalRecord record3 = new MedicalRecord(
+					date3,
+					"Injury treatment",
+					"Treated minor injury on the paw",
+					"Pet Care Hospital"
+
+			);
+
+			bunny1.addOneMedicalRecord(record1);
+			bunny1.addOneMedicalRecord(record3);
+
+			System.out.println("Saving...");
+			bunnyRepository.save(bunny2);
+			System.out.println("Saving done !!");
+
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+	}
 }

@@ -1,0 +1,265 @@
+
+/* ------------------ Global ------------------ */
+
+*{
+    box-sizing: border-box;
+  }
+  
+  .landing-page{
+    background: #efefef;
+    font-size: 16px;
+    font-family: sans-serif, Helvetica, Arial;
+    margin: 0;
+    height: 100%;
+  }
+  
+  .sr-only{
+    display: none;
+  }
+  
+  /* ------------------ Navigation ------------------ */
+  .landing-page .navigation{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #b0d7ff;
+    height: 15vh;
+    padding: 0 20px;
+  }
+  
+  
+  
+  .landing-page .brand{
+    margin-left: 50px;
+    height: 80px;
+    width: 80px;
+  }
+  
+  .landing-page .collapse .navbar-collapse {
+    justify-content: flex-end;
+  }
+  
+  .landing-page .navbar-toggler{
+    margin-right: 30px;
+  }
+  
+  .landing-page .nav-item a{
+    line-height: 100%;
+    color:white;
+  }
+  
+  .landing-page .navbar-nav {
+    margin-left: auto; 
+  }
+  
+  .landing-page .nav-item a:hover{
+    
+    color: #e19e67;
+  }
+  
+  .landing-page .nav-item:hover{
+    
+    background-color: white;
+  }
+  
+  .landing-page .nav-item{
+    width: 100px;
+    max-width: 150px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+    flex-direction: row;
+    height: 50px;
+    background-color: #e19e67;
+    margin: 10px;
+    border-radius: 10px;
+  }
+  
+  /* ------------------ Hero ------------------ */
+  
+  .hero{
+    height: 80vh;
+  }
+
+  .hero .bg-image{
+    filter: blur(3px);
+    -webkit-filter: blur(3px);
+    background-image: url(src/assets/index/images/Hero_img2.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100%;
+  } 
+
+  .hero .special-box{
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0, 0.4); /* Black w/opacity/see-through */
+    color: rgb(244, 244, 244);
+    font-weight: bold;
+    position: absolute;
+    border: 3px solid #f1f1f1;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    width: 80%;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  
+  .hero .title{
+    margin-bottom: 60px;
+    
+  }
+  
+  .title h1{
+    font-weight: bold;
+  }
+  
+  
+  .hero button{
+    margin-right: 50px;
+    height: 60px;
+    border-radius: 25px;
+    border: 0;
+    background-color: #e19e67; 
+    width: 250px;
+  }
+  
+  .hero button:hover{
+    background-color: white;
+    color: #e19e67;
+  }
+  
+  /* ------------------ About Us ------------------ */
+  
+  .About_Us{
+    margin: 70px 0 !important; 
+    padding: 10px;
+    height: 60vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  .About_Us .container{
+    
+    height: auto;
+    width: 700px;
+    
+  }
+  .About_Us img{
+    width: 80%;
+    height: auto;
+  }
+  
+  .About_Us .Text{
+    
+    padding: 0 30px;
+    height: auto;
+    
+  }
+  
+  
+  
+  /* ------------------ Event and News ------------------ */
+  .Event_News{
+    margin: 70px 0;
+    height: 80vh;
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  
+  .Event_News h2{
+    margin-bottom: 20px;
+  }
+  
+  .Event .container{
+    
+    height: auto;
+    width: 700px;
+    
+  }
+  
+  .Event img{
+    height: 50%;
+    width: 80%;
+    object-fit: cover;
+  }
+  
+  .Event caption{
+    height: 50px;
+    width: 100%;
+  }
+
+  .Event h2{
+    padding-left: 20px;
+  }
+  
+  .Event caption h3,p{
+    margin-top: 10px;
+    font-size: 1em;
+  }
+  
+  .News ul{
+    padding: 0;
+  }
+  
+  
+  .News .item{
+    
+    height: auto;
+    margin-top: 10px;
+    background-color:azure;
+    list-style: none;
+    padding: 10px;
+  }
+  
+  /* ------------------ Footer ------------------ */
+  
+  .footer{
+    background-color: #b0d7ff;
+    height: 269px;
+  }
+  
+  .footer h2{
+    font-weight: bold;
+  }
+  
+  .FooterBox  {
+    text-align: left;
+    padding: 30px 0 0 30px;
+    margin-left: 10px;
+  }
+  
+  .FooterBox .left {
+    width: 30%;
+    
+  }
+  
+  .FooterBox .right {
+    width: 70%;
+  }
+  
+  .contact-list{
+    padding: 0;
+  }
+  
+  .contact-list .item{
+    list-style: none;
+    
+  }
+  
+  .contact-list a{
+    text-decoration: none;
+    color: #0f3680;
+  }
+  
+  .contact-list a:hover{
+    text-decoration: underline;
+    color: #f3f8ff;
+  }

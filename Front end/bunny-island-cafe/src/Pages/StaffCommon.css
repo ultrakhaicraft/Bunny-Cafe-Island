@@ -1,0 +1,376 @@
+*{
+    box-sizing: border-box;
+}
+
+body{
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    height: 100vh;
+    overflow-x: hidden;
+    background: #f3f4f6;
+}
+
+/*#region text */
+
+.biggerText{
+    font-size: 64px;
+    font-family: 'Segoe UI', Tahoma, Verdana, sans-serif;
+    line-height: normal;
+    font-weight: 400;
+}
+
+.bigText{
+    font-size: 32px;
+    font-family: 'Segoe UI', Tahoma, Verdana, sans-serif;
+    line-height: normal;
+    font-weight: 400;
+}
+
+.mediumText{
+    font-size: 24px;
+    font-family: 'Segoe UI', Tahoma, Verdana, sans-serif;
+    line-height: normal;
+    font-weight: 400;
+}
+
+.smallMediumText{
+    font-size: 20px;
+    font-family: 'Segoe UI', Tahoma, Verdana, sans-serif;
+    line-height: normal;
+    font-weight: 400;
+}
+
+.smallText{
+    font-size: 16px;
+    font-family: 'Segoe UI', Tahoma, Verdana, sans-serif;
+    line-height: normal;
+    font-weight: 400;
+}
+/* #endregion */
+
+/*#region button*/
+.primary-button{
+    background-color: #1f2e6c;
+    max-width: 200px;
+    width: 130px;
+    height: 50px;
+    color:#ffffff;
+}
+
+
+.secondary-button{
+    background-color: #fff7d0;
+    max-width: 200px;
+    width: 130px;
+    height: 50px;
+    color:#0a1127;
+}
+
+.danger-button{
+    background-color: #b10707;
+    max-width: 200px;
+    width: 130px;
+    height: 50px;
+    color:#ffffff;
+}
+
+/*#endregion*/
+
+
+/*#region sidebar */
+
+.sidebar{
+    background-image: linear-gradient(176deg, #FFFEBE 48.8%, #FFE098 101.44%);
+    height: 100%;
+    padding-top: 20px;
+    width: 250px;
+    position: fixed;
+    transition: width 0.5s ease;
+}
+
+.toggleSidebar-Btn{
+    width: 20px;
+    height: 20px;
+    background: #e39536;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    position: absolute;
+    left: 260px;
+    transition: left 0.5s ease;
+}
+
+.sidebar-header{
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.sidebar-header .brand{
+    display: flex;
+    align-items: center;
+    color: #0b212e;
+}
+
+.sidebar-header .brand i {
+    margin-right: 10px;
+    font-size: 28px;
+}
+
+.sidebar-content .nav-links {
+    list-style-type: none;
+    padding: 0;
+    margin-top: 20px;
+}
+
+.sidebar-content .nav-item{
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    padding: 12px 20px;
+    background-color: transparent;
+    color: #0b212e;
+    transition: background 0.3s ease, padding-left 0.3s ease;
+    position: relative;
+}
+
+.sidebar-content .nav-icon{
+    font-size: 24px;
+    width: 35px;
+    min-width: 35px;
+    height: 35px;
+    line-height: 35px;
+    text-align: center;
+    display: inline-block;
+    margin-right: 10px;
+    border-radius: 2px;
+}
+
+/*#endregion */
+
+/*#region sidebar nav hover */
+
+.nav-item:hover {
+    background: #ffb260;
+    padding-left: 30px;
+  }
+
+.nav-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 5px;
+    height: 100%;
+    background: #000000;
+    transition: transform 0.3s ease;
+    transform: scaleY(0);
+    transform-origin: bottom;
+  }
+  
+  .nav-item:hover::before {
+    transform: scaleY(1);
+    transform-origin: top;
+  }
+
+/*#endregion*/
+
+/*#region sidebar nav when collapse */
+
+.sidebar-collapsed{
+    width: 0;
+}
+
+.sidebar-collapsed .sidebar-header,
+.sidebar-collapsed .sidebar-content{
+    display: none;
+}
+
+
+.sidebar-collapsed ~ .main-content {
+    margin-left: 20px;
+    width: calc(100% - 20px);
+  }
+
+.toggleSidebar-Btn-collapsed{
+    left: 10px;
+}
+
+/*#endregion*/
+
+
+.main-content{
+    margin-left: 270px;
+    padding: 40px;
+    width: calc(100% - 270px);
+    transition: margin-left 0.5s ease;
+    background: #f3f4f6;
+}
+
+/*#region search area*/
+
+.search-area{
+  width: 100%;
+  height: 60px;
+  margin: 20px 0;
+  background-color: #ffffff;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 10px 30px 10px 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  vertical-align: middle;
+}
+
+.search-bar{
+  display: flex;
+  align-items: center;
+  border: 1px solid #ddd;
+  height: 90%;
+  padding: 8px 15px;
+  max-width: 300px;
+  width: 100%;
+  
+}
+
+.search-icon{
+  margin-right: 8px;
+  font-size: 1.2em;
+}
+
+.search-input{
+  border: none;
+    outline: none;
+    width: 100%;
+    font-size: 1em;
+    margin-bottom: 0px;
+    height: 90%;
+    
+}
+
+/*#endregion*/
+
+/*#region table */
+
+
+.table {
+  vertical-align: middle;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.table img{
+  width: 100px;
+  height: 100px;
+}
+
+.table th{
+  background-color: #e4f8ff;
+}
+
+.table .Name{
+  font-weight: bold;
+}
+
+.button-group .btn{
+  margin-right: 50px;
+}
+
+
+
+
+/*#endregion */
+
+
+/*#region pagination */
+.pagination-area{
+    display: flex;
+    justify-content: end;
+}
+
+
+/*#endregion*/
+
+
+/*#region modal */
+
+
+  
+  /* Modal container */
+  
+  .modal {
+    display: block;
+    position: fixed;
+    z-index: 1100;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    transform: translateY(-20px); 
+    animation: slideDown 0.4s ease-out forwards;
+    
+  }
+  
+
+  @keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px); 
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0); 
+    }
+}
+
+.modal-dialog {
+  margin: auto;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  width: auto;
+  max-width: 800px;
+  padding: 15px;
+}
+
+
+.modal-content {
+  height: fit-content;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  animation: fadeIn 0.3s ease-in-out;
+  overflow: auto;
+}
+
+.modal .modal-content-long{
+  height: 600px;
+}
+
+
+.form-group .selection{
+  display: inline-block;
+}
+  
+  
+.modal textarea{
+  width: 100%;
+}
+ 
+
+
+
+
+/*#endregion*/
+
+

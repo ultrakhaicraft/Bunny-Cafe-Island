@@ -64,7 +64,7 @@ public class ReservationAPI {
         if(aReservation==null){
             throw new BadRequestException("Reservation not found  ID: "+reservationId);
         }
-        reservationService.deleReservationById(reservationId);
+        reservationService.deleteReservationById(reservationId);
         return "Delete Reservation ID: "+reservationId;
     }
 }

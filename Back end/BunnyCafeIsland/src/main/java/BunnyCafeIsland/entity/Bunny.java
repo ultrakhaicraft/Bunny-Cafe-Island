@@ -3,7 +3,9 @@ package BunnyCafeIsland.Entity;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import BunnyCafeIsland.Enums.AvailabilityStatus;
 import BunnyCafeIsland.Enums.Gender;
@@ -47,9 +49,16 @@ public class Bunny {
     @Temporal(TemporalType.DATE)
     private Date dateAdded;
 
+
+    @OneToMany(mappedBy = "bunny",cascade = {CascadeType.MERGE,CascadeType.PERSIST,CascadeType.DETACH,CascadeType.REFRESH},
+    orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<MedicalRecord> medicalRecordsList;
+    
+
+
     public Bunny(){}
 
-    public Bunny(String name,String breed, Gender gender, int age, String description, String image, AvailabilityStatus availabilityStatus, String healthStatus, Date dateAdded) {
+    public Bunny(String name, String breed, Gender gender, int age, String description, String image, AvailabilityStatus availabilityStatus, String healthStatus, Date dateAdded, List<MedicalRecord> medicalRecordsList) {
         this.name = name;
         this.breed = breed;
         this.gender = gender;
@@ -59,22 +68,7 @@ public class Bunny {
         this.availabilityStatus = availabilityStatus;
         this.healthStatus = healthStatus;
         this.dateAdded = dateAdded;
-    }
-
-    @Override
-    public String toString() {
-        return "Bunny{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", breed='" + breed + '\'' +
-                ", gender=" + gender +
-                ", age=" + age +
-                ", description='" + description + '\'' +
-                ", image='" + image + '\'' +
-                ", availabilityStatus=" + availabilityStatus +
-                ", healthStatus='" + healthStatus + '\'' +
-                ", dateAdded=" + dateAdded +
-                '}';
+        this.medicalRecordsList = medicalRecordsList;
     }
 
     public int getId() {
@@ -155,5 +149,21 @@ public class Bunny {
 
     public void setDateAdded(Date dateAdded) {
         this.dateAdded = dateAdded;
+    }
+
+    public List<MedicalRecord> getMedicalRecordsList() {
+        return medicalRecordsList;
+    }
+
+    public void setMedicalRecordsList(List<MedicalRecord> medicalRecordsList) {
+        this.medicalRecordsList = medicalRecordsList;
+    }
+
+    public void addOneMedicalRecord(MedicalRecord medicalRecord){
+        if(medicalRecordsList==null){
+            medicalRecordsList=new ArrayList<>();
+        }
+        medicalRecordsList.add(medicalRecord);
+        medicalRecord.setBunny(this);
     }
 }

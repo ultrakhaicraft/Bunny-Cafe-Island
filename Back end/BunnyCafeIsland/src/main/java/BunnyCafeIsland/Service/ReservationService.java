@@ -40,7 +40,7 @@ public class ReservationService {
         return reservationRepository.save(aReservation);
     }
 
-    public void deleReservationById(int id){
+    public void deleteReservationById(int id){
         reservationRepository.deleteById(id);
     }
 
