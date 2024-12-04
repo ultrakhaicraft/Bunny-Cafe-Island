@@ -74,21 +74,4 @@ public class SecurityConfig {
     }
 
 
-     /*@Bean
-    public InMemoryUserDetailsManager userDetailsManager(){
-
-        UserDetails Hifami = User.builder()
-            .username("Hifami")
-            .password("{noop}1234")
-            .roles("Staff","Manager")
-            .build();
-
-        UserDetails Alice = User.builder()
-            .username("AliceJohnson")
-            .password("{noop}alice")
-            .roles("Staff")
-            .build();
-
-        return new InMemoryUserDetailsManager(Hifami, Alice);
-    }*/
 }
