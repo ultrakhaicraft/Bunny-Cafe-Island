@@ -1,75 +1,60 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { Outlet,Link } from "react-router-dom";
+import NavSideBar from './Component/Sidebar/navSideBar';
 import './StaffCommon.css'
 
 
-const Home = (props) => {
+const Home = () => {
   const location = useLocation();
-  const { email, loggedIn } = location.state || {};
+  /*const { email, loggedIn } = location.state || {};*/
+  const [user,setUser] = useState({}); 
   
   
+    
+    useEffect(() => {
+      const storedUserInfo = JSON.parse(localStorage.getItem("userInfo"));     
+      if (storedUserInfo) {
+        setUser(storedUserInfo)
+      }
+    }, [])
+    
 
-  
   return (
-    <div className="dashboard container-fluid row">
+    <div>
       
-        <div className="SideMenu col-lg-2">
+      <NavSideBar/>  
 
-          <div className="MenuTitle BigText container-fluid row">
-            
-
-            <img
-              className="MenuIcon col-lg-7"
-              alt="Bunny icon by Dooder from Flaticon"
-              src="src/assets/index/images/bunny.png"
-            />
-
-            <div className="TextWrapper col-lg-5">BIC</div>
-          </div>
-
-          <div className="MenuContent smallMediumText">
-            <div className="MenuItems">
-              <Link to="/staffHome">Dashboard</Link>
-            </div>
-            
-            <div className="MenuItems">
-              <Link to="/handleReservation">Handle Reservation</Link>
-            </div>
-
-            <div className="MenuItems">
-              <Link to="/handleAdoption">Handle Adoption</Link>
-            </div>
-
-            <div className="MenuItems">
-              <Link to="/manageBunny">Manage Bunny</Link>
-            </div>
-
-            <div className="MenuItems">
-              <Link to="/manageMenu">Manage Menu</Link>
-            </div>
-          </div>
-
-          
-        </div>
-
-        <div className='Content col-lg-10'>
+      <div className='main-content col-lg-10'>
         <div className="Title BiggerText">
-          Welcome, "username"
+          Welcome, {user.name}
         </div>
 
         <div className="Label BigText">
-          Email: "Email"
+          Email: {user.email}
         </div>
 
         <div className="Label BigText">
-          Role: "Role"
+          Role: {user.role}
         </div>
-        </div>
+
+        {user.role=="Manager"&&<AdminOnly/>}
+        
+      </div>
         
     </div>
   
 
+  );
+};
+
+
+const AdminOnly = ()=>{
+  return(
+    <>
+    <div >
+      <h3>Hello there Manager !!!!</h3>
+    </div>
+    </>
   );
 };
 

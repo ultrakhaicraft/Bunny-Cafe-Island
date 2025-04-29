@@ -28,7 +28,7 @@ function Login(props){
 
         // Attempt to call API
         try {
-            const response = await fetch('http://localhost:8080/api/login',{
+            const response = await fetch('http://localhost:8080/api/auth/authenticate',{
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -39,9 +39,12 @@ function Login(props){
             // Check the response
             if (response.ok){
                 const data = await response.json();
+
+                localStorage.setItem('jwtToken',data.token);
+                localStorage.setItem('userInfo',JSON.stringify(data.userInfo));
+
                 const loggedIn = true;
                 console.log("Login successful: ", data);
-                localStorage.setItem('token', data.token);
                 navigate("/staffHome", { state: { email: email, loggedIn: loggedIn } });
                 
             } else {

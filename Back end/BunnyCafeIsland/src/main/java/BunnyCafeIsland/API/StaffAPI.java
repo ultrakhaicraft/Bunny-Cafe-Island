@@ -53,12 +53,6 @@ public class StaffAPI {
         return aStaff;
     }
 
-    @GetMapping("/login")
-    public String getMethodName(@RequestParam String email, @RequestParam String password) {
-        return new String();
-    }
-    
-
     @PostMapping("/staffs")
     public Staff addStaff(@RequestBody Staff aStaff) {
         //If they pass an ID in json, set id to 0.

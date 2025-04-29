@@ -1,0 +1,126 @@
+
+/*#region sidebar */
+
+.sidebar{
+    background-image: linear-gradient(176deg, #FFFEBE 48.8%, #FFE098 101.44%);
+    height: 100%;
+    padding-top: 20px;
+    width: 250px;
+    position: fixed;
+    transition: width 0.5s ease;
+}
+
+.toggleSidebar-Btn{
+    width: 20px;
+    height: 20px;
+    background: #e39536;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    position: absolute;
+    left: 260px;
+    transition: left 0.5s ease;
+}
+
+.sidebar-header{
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.sidebar-header .brand{
+    display: flex;
+    align-items: center;
+    color: #0b212e;
+}
+
+.sidebar-header .brand i {
+    margin-right: 10px;
+    font-size: 28px;
+}
+
+ .sidebar-content .nav-links {
+    list-style-type: none;
+    padding: 0;
+    margin-top: 20px;
+}
+
+.sidebar-content .staff-nav-item{
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    padding: 12px 20px;
+    background-color: transparent;
+    color: #0b212e;
+    transition: background 0.3s ease, padding-left 0.3s ease;
+    position: relative;
+}
+
+ .sidebar-content .nav-icon{
+    font-size: 24px;
+    width: 35px;
+    min-width: 35px;
+    height: 35px;
+    line-height: 35px;
+    text-align: center;
+    display: inline-block;
+    margin-right: 10px;
+    border-radius: 2px;
+}
+
+/*#endregion */
+
+/*#region sidebar nav hover */
+
+
+.staff-nav-item:hover {
+    background: #ffb260;
+    padding-left: 30px;
+  }
+
+.staff-nav-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 5px;
+    height: 100%;
+    background: #000000;
+    transition: transform 0.3s ease;
+    transform: scaleY(0);
+    transform-origin: bottom;
+  }
+  
+ .staff-nav-item:hover::before {
+    transform: scaleY(1);
+    transform-origin: top;
+  }
+
+/*#endregion*/
+
+/*#region sidebar nav when collapse */
+
+.sidebar-collapsed{
+    width: 0;
+}
+
+.sidebar-collapsed .sidebar-header,
+ .sidebar-collapsed .sidebar-content{
+    display: none;
+}
+
+
+.sidebar-collapsed ~ .main-content {
+    margin-left: 20px;
+    width: calc(100% - 20px);
+  }
+
+ .toggleSidebar-Btn-collapsed{
+    left: 10px;
+}
+
+/*#endregion*/

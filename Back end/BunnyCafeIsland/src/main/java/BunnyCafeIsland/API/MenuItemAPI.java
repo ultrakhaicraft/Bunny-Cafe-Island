@@ -3,15 +3,15 @@ package BunnyCafeIsland.API;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import BunnyCafeIsland.DTO.MenuItemDTO;
 import BunnyCafeIsland.DTO.SingleMessageResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,12 +35,15 @@ public class MenuItemAPI {
         this.menuItemService=menuItemService;
     }
     
+
+
+    @ResponseBody
     @GetMapping("/menuItems")
-    public List<MenuItemDTO> getAll() {
-        List<MenuItem> menuItemList = menuItemService.getAll();
-        return menuItemList.stream()
-                .map(menuItemService::convertToDTO)
-                .collect(Collectors.toList());
+    public Page<MenuItem> getAllWithPagination ( @RequestParam(defaultValue = "0") int page,
+                                                 @RequestParam(defaultValue = "5") int size){
+        Pageable pageable = PageRequest.of(page, size);
+        return menuItemService.getAllPageable(pageable);
+
     }
 
     @GetMapping("/menuItems/{menuItemId}")

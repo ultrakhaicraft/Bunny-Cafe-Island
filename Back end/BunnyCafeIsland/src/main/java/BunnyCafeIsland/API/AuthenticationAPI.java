@@ -33,18 +33,11 @@ public class AuthenticationAPI {
         return ResponseEntity.ok(authenticationService.authenticate(request));
     }
 
-    /*
-    @PostMapping("/login")
-    public ResponseEntity<?> postMethodName(@RequestBody LoginRequest loginRequest) {
-            boolean isAuthenticated = authenticationService.authenticatedUser(loginRequest.getEmail(), loginRequest.getPassword());
 
-        if (isAuthenticated) {
-            return ResponseEntity.ok("{\"message\": \"Login successful\"}");
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("{\"message\": \"Bad credentials\"}");
-        }
-    }
-    */
+
+
+
+
     
         
         

@@ -2,6 +2,7 @@ package BunnyCafeIsland.Service;
 
 import BunnyCafeIsland.DTO.AuthenticationRequest;
 import BunnyCafeIsland.DTO.AuthenticationResponse;
+import BunnyCafeIsland.DTO.UserInfoResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -37,9 +38,20 @@ public class AuthenticationService {
                 new UsernamePasswordAuthenticationToken(request.getEmail(),request.getPassword())
         );
         var user = staffRepository.findByEmail(request.getEmail()).orElseThrow();
+
         var JwtToken = jwtService.createTokenForUser(user);
+
+        UserInfoResponse userInfoResponse = new UserInfoResponse(
+                user.getEmail(),
+                user.getName(),
+                user.getPhone(),
+                user.getProfilePicture(),
+                user.getRole().toString()
+        );
+
         return AuthenticationResponse.builder()
                 .token(JwtToken)
+                .userInfo(userInfoResponse)
                 .build();
     }
 

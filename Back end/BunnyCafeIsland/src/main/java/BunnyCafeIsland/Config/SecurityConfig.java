@@ -50,19 +50,18 @@ public class SecurityConfig {
                 .authorizeHttpRequests(req->
                              req.requestMatchers("/api/auth/**").permitAll()
                                 .requestMatchers(HttpMethod.GET,"/api/management/menuItems/images/**").permitAll()
-                                     .requestMatchers("/api/management/menuItems/**").hasAnyRole(Staff.name(),Manager.name())
-                                .requestMatchers(HttpMethod.GET, "/api/management/menuItems").hasAnyAuthority(STAFF_READ.name(),MANAGER_READ.name())
-                                .requestMatchers(HttpMethod.GET, "/api/management/menuItems/**").hasAnyAuthority(STAFF_READ.name(),MANAGER_READ.name())
-                                .requestMatchers(HttpMethod.POST, "/api/management/menuItems").hasAnyAuthority(MANAGER_CREATE.name())
-                                .requestMatchers(HttpMethod.PUT, "/api/management/menuItems").hasAnyAuthority(MANAGER_UPDATE.name())
-                                .requestMatchers(HttpMethod.DELETE, "/api/management/menuItems/**").hasAnyAuthority(MANAGER_DELETE.name())
+                                .requestMatchers(HttpMethod.GET, "/api/management/menuItems").hasAnyRole(Staff.name(),Manager.name())
+                                .requestMatchers(HttpMethod.GET, "/api/management/menuItems/**").hasAnyRole(Staff.name(),Manager.name())
+                                .requestMatchers(HttpMethod.POST, "/api/management/menuItems").hasAnyRole(Manager.name())
+                                .requestMatchers(HttpMethod.PUT, "/api/management/menuItems").hasAnyRole(Manager.name())
+                                .requestMatchers(HttpMethod.DELETE, "/api/management/menuItems/**").hasAnyRole(Manager.name())
 
                                 .anyRequest()
                                 .authenticated()
                 )
                 .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
-                .addFilterAfter(new LoggingFilter(), org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class)
+
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
 

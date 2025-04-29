@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom'
-import { Outlet,Link } from "react-router-dom";
 import { createPortal } from 'react-dom';
-import Backdrop from './Component/Backdrop/backdrop'
-import './StaffCommon.css'
+import Backdrop from './Component/Backdrop/backdrop';
+import NavSideBar from './Component/Sidebar/navSideBar';
+import './StaffCommon.css';
+import { AddMenuItem, DeleteMenuItem, getAllMenuItems, UpdateMenuItem, uploadImage } from '../API/MenuItemsAPI';
 	
 
 const Main = () => {
@@ -14,15 +14,11 @@ const Main = () => {
 
 	 //Call API to get all menu items
 	useEffect(()=>{
+		const token = localStorage.getItem('jwtToken');
+		
 		(async()=>{
 			try {
-				const response = await fetch('http://localhost:8080/api/menuItems',{
-					method: 'GET',
-				})
-				if(!response.ok){
-						throw new Error(`API call error: ${response.status} ${response.statusText}`);
-				}
-				const data=await response.json();
+				const data=await getAllMenuItems(token);
 				setMenuItems(data);
 			} catch (error) {
 				setError(error.message)
@@ -34,9 +30,9 @@ const Main = () => {
 
 	return (
 		<div>
-				<NavSideBar />
-
-				<div className='main-content '>
+				<NavSideBar/>
+				
+				<div className='main-content'>
 
 				<div className="Title biggerText">
 					Menu Item Management
@@ -207,43 +203,20 @@ const ModalForCreate = ({setIsModalOpen}) => {
 	const addItem = async (newItem) => {
 		try {
 		  
-		  let response = await fetch('http://localhost:8080/api/menuItems', {
-			method: 'POST',
-			headers: {
-			  "Content-Type": "application/json",
-			},
-			body: JSON.stringify(newItem),
-		  });
+			const token = localStorage.getItem('jwtToken');
 	  
+		  	const itemData = await AddMenuItem(token,newItem);
+		  	const itemId = itemData.id; 
+
 		  
-		  if (!response.ok) {
-			throw new Error("Failed to add new menu item");
-		  }
+		  	const formData = new FormData();
+		  	formData.append('file', file, file.name); 
+		  	formData.append('id', itemId); 
 	  
-		  
-		  const itemData = await response.json();
-		  const itemId = itemData.id; 
+		  	const data = await uploadImage(token,formData);
+
+		  	console.log("Item added successfully:", data);
 	  
-		  
-		  const formData = new FormData();
-		  formData.append('file', file, file.name); 
-		  formData.append('id', itemId); 
-	  
-		  
-		  response = await fetch("http://localhost:8080/api/menuItems/images", {
-			method: "PUT",
-			body: formData,
-		  });
-	  
-		 
-		  if (!response.ok) {
-			throw new Error("Failed to upload image");
-		  }
-	  
-		  const data = await response.json();
-		  console.log("Item added successfully:", data);
-	  
-		  
 		  setNewItem({
 			name: "",
 			price: "",
@@ -251,8 +224,10 @@ const ModalForCreate = ({setIsModalOpen}) => {
 			status: "Available",
 			type: "Permanent",
 		  });
+
 		  setFile(undefined);
 		  window.location.reload(false);
+
 		} catch (error) {
 		  console.error("Error adding item:", error);
 		} finally {
@@ -324,19 +299,12 @@ const ModalForDelete = ({setIsModalOpenDel,MenuItem}) =>{
 	const deleteItem = async() => {
 		try {
 			
-			const response = await fetch(`http://localhost:8080/api/menuItems/${MenuItem.id}`,{
-				method: 'DELETE',
-				headers:{
-					'Content-Type':'application/json'
-				}
-			})
-
-			if (!response.ok) {
-				throw new Error("Failed to delete menu item");
-			}
+			const token = localStorage.getItem('jwtToken');
 	
-			const data = await response.json();
-			console.log("Item added successfully:", data);
+			const data = await DeleteMenuItem(token,MenuItem.id);
+			
+			console.log("Item deleted successfully:", data);
+
 			window.location.reload(false);
 		} catch (error) {
 			console.error("Error deleting item:", error);
@@ -399,38 +367,19 @@ const ModalForUpdate = ({setIsModalOpenUpd,MenuItem}) => {
 
 		const updateItem = async (updatedItem) => {
 			try {
-				let response = await fetch("http://localhost:8080/api/menuItems", {
-					method: "PUT",
-					headers:{
-						"Content-Type":"application/json",
-					},
-					body: JSON.stringify(updatedItem), 
-			  	});
-		
-			  	if (!response.ok) {
-					throw new Error("Failed to update menu item info");
-			  	}
 
+				const token = localStorage.getItem('jwtToken');
 			  	
-					const itemData = await response.json();
-          	  		const itemId = itemData.id; 
+				const itemData = await UpdateMenuItem(token,updateItem)
+          	  	const itemId = itemData.id; 
 
-					const formData = new FormData();
-					formData.append('file', file, file.name); 
-					formData.append('id', itemId); 
+				const formData = new FormData();
+				formData.append('file', file, file.name); 
+				formData.append('id', itemId); 
 
-					response = await fetch("http://localhost:8080/api/menuItems/images", {
-						method: "PUT",
-						body: formData,
-					});
-
-					if (!response.ok) {
-						throw new Error("Failed to upload image");
-					}
-				
-			  
-			  	const data = await response.json();
+			  	const data = await uploadImage(token,formData);
 			  	console.log("Item updated successfully:", data);
+
 				window.location.reload(false);
 			} catch (error) {
 			  console.error("Error updating item:", error);
@@ -499,56 +448,6 @@ const ModalForUpdate = ({setIsModalOpenUpd,MenuItem}) => {
 		</div>
 		);
 };
-
-const NavSideBar = () => {
-	const[isOpen,setIsOpen] = useState(false);
-
-	const toggleSidebar = () =>{
-		setIsOpen(!isOpen);
-	};
-
-	return(
-			<aside className={`sidebar ${isOpen? 'sidebar-collapsed' : '' } `}>
-				<button className={`toggleSidebar-Btn ${isOpen? 'toggleSidebar-Btn-collapsed':''}`} onClick={toggleSidebar}>
-				<i className={`fas ${isOpen ? 'fa-chevron-left' : 'fa-chevron-right'} toggle-icon`}></i>
-				</button>
-					<div className='sidebar-header' >
-						<h2 className='brand '><i className="fas fa-anchor"></i>
-						<span className='' >Bunny Island Cafe</span></h2>
-					</div>
-
-					<nav className='sidebar-content'>
-						<ul className='nav-links'>
-								<li>
-									<Link className='nav-item'  to="/staffHome"><span className="nav-icon"><i className="fas fa-home"></i></span>
-									<span>Home</span></Link>
-								</li>
-								<li>
-									<Link className='nav-item' to="/handleReservation"><span className="nav-icon"><i className="fa-regular fa-calendar-check"></i></span>
-									<span>Handle Reservation</span></Link>
-								</li>
-								<li>
-									<Link className='nav-item'  to="/handleAdoption"><span className="nav-icon"><i className="fa-solid fa-check-to-slot"></i></span>
-									<span>Handle Adoption</span></Link>
-								</li>
-								<li>
-									<Link className='nav-item' to="/manageBunny"><span className="nav-icon"><i className="fa-solid fa-feather"></i></span>
-									<span>Manage Bunny</span></Link>
-								</li>
-								<li>
-									<Link className='nav-item' to="/manageMenu"><span className="nav-icon"><i className="fa-solid fa-utensils"></i></span>
-									<span>Manage Menu</span></Link>
-								</li>
-						</ul>
-					</nav>
-			</aside>
-		);
-};
-
-
-
-
-
 
 
 

@@ -12,6 +12,8 @@ import java.util.function.BiFunction;
 import BunnyCafeIsland.DTO.MenuItemDTO;
 import ch.qos.logback.classic.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import BunnyCafeIsland.Entity.MenuItem;
@@ -54,7 +56,11 @@ public class MenuItemService implements IMenuItemService {
     @Override
     public List<MenuItem> getAll() {
             return menuItemRepository.findAll();
-        }
+    }
+
+    public Page<MenuItem> getAllPageable(Pageable pageable){
+        return menuItemRepository.findAll(pageable);
+    }
 
     @Override
     public void delete(int id) {
@@ -117,7 +123,7 @@ public class MenuItemService implements IMenuItemService {
             Files.copy(image.getInputStream(),imageStorageLocation
                     .resolve(id+getImageExtension(image.getOriginalFilename())),REPLACE_EXISTING);
             return ServletUriComponentsBuilder.fromCurrentContextPath()
-                    .path("/api/menuItems/images/"+filename)
+                    .path("/api/management/menuItems/images/"+filename)
                     .toUriString();
         }catch (Exception exception){
             throw new RuntimeException("Unable to save image");
