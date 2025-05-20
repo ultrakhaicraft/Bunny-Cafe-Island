@@ -1,24 +1,20 @@
 package BunnyCafeIsland.Service;
 
-import BunnyCafeIsland.DTO.AuthenticationRequest;
-import BunnyCafeIsland.DTO.AuthenticationResponse;
-import BunnyCafeIsland.DTO.UserInfoResponse;
+import BunnyCafeIsland.DTO.Request.AuthenticationRequest;
+import BunnyCafeIsland.DTO.Response.AuthenticationResponse;
+import BunnyCafeIsland.DTO.Response.UserInfoResponse;
+import BunnyCafeIsland.Service.Interface.IAuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import BunnyCafeIsland.Entity.Staff;
 import BunnyCafeIsland.Repository.StaffRepository;
-
-import java.util.Optional;
 
 
 @Service
-public class AuthenticationService {
+public class AuthenticationService implements IAuthenticationService {
 
     private final StaffRepository staffRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;

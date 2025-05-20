@@ -1,4 +1,4 @@
-package BunnyCafeIsland.DTO;
+package BunnyCafeIsland.DTO.Response;
 
 import BunnyCafeIsland.Enums.MenuStatus;
 import BunnyCafeIsland.Enums.MenuType;
@@ -9,13 +9,11 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class MenuItemDTO {
-
+public class MenuItemResponse {
     private int id;
     private String name;
     private int price;
@@ -24,7 +22,4 @@ public class MenuItemDTO {
     private MenuType type;
     private String image_path;
     private LocalDateTime date_added;
-
-
-
 }

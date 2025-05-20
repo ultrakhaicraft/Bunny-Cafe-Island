@@ -1,4 +1,4 @@
-package BunnyCafeIsland.DTO;
+package BunnyCafeIsland.DTO.Response;
 
 
 import lombok.AllArgsConstructor;

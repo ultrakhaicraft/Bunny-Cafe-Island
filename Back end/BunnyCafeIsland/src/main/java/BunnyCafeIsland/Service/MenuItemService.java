@@ -1,16 +1,15 @@
 package BunnyCafeIsland.Service;
 
-import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.BiFunction;
 
-import BunnyCafeIsland.DTO.MenuItemDTO;
-import ch.qos.logback.classic.Logger;
+import BunnyCafeIsland.DTO.Request.MenuItemRequest;
+import BunnyCafeIsland.DTO.Response.MenuItemResponse;
+import BunnyCafeIsland.Service.Interface.IMenuItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -68,39 +67,39 @@ public class MenuItemService implements IMenuItemService {
     }
 
     @Override
-    public MenuItemDTO convertToDTO(MenuItem menuItem) {
-        MenuItemDTO menuItemDTO = new MenuItemDTO();
+    public MenuItemResponse convertToDTO(MenuItem menuItem) {
+        MenuItemResponse menuItemResponse = new MenuItemResponse();
         if(menuItem!=null){
-            menuItemDTO.setId(menuItem.getId());
+            menuItemResponse.setId(menuItem.getId());
         }else{
-            menuItemDTO.setId(0);
+            menuItemResponse.setId(0);
         }
-        menuItemDTO.setName(menuItem.getName());
-        menuItemDTO.setPrice(menuItem.getPrice());
-        menuItemDTO.setDescription(menuItem.getDescription());
-        menuItemDTO.setStatus(menuItem.getStatus());
-        menuItemDTO.setType(menuItem.getType());
-        menuItemDTO.setImage_path(menuItem.getImage_path());
-        menuItemDTO.setDate_added(menuItem.getDate_added());
-        return menuItemDTO;
+        menuItemResponse.setName(menuItem.getName());
+        menuItemResponse.setPrice(menuItem.getPrice());
+        menuItemResponse.setDescription(menuItem.getDescription());
+        menuItemResponse.setStatus(menuItem.getStatus());
+        menuItemResponse.setType(menuItem.getType());
+        menuItemResponse.setImage_path(menuItem.getImage_path());
+        menuItemResponse.setDate_added(menuItem.getDate_added());
+        return menuItemResponse;
     }
 
     @Override
-    public MenuItem convertToEntity(MenuItemDTO menuItemDTO) {
+    public MenuItem convertToEntity(MenuItemRequest menuItemRequest) {
         MenuItem menuItem = new MenuItem();
-        if(menuItemDTO!=null){
-            menuItem.setId(menuItemDTO.getId());
+        if(menuItemRequest !=null){
+            menuItem.setId(menuItemRequest.getId());
         }else{
             menuItem.setId(0);
         }
-        menuItem.setId(menuItemDTO.getId());
-        menuItem.setName(menuItemDTO.getName());
-        menuItem.setPrice(menuItemDTO.getPrice());
-        menuItem.setDescription(menuItemDTO.getDescription());
-        menuItem.setStatus(menuItemDTO.getStatus());
-        menuItem.setType(menuItemDTO.getType());
-        menuItem.setImage_path(menuItemDTO.getImage_path());
-        menuItem.setDate_added(menuItemDTO.getDate_added());
+        menuItem.setId(menuItemRequest.getId());
+        menuItem.setName(menuItemRequest.getName());
+        menuItem.setPrice(menuItemRequest.getPrice());
+        menuItem.setDescription(menuItemRequest.getDescription());
+        menuItem.setStatus(menuItemRequest.getStatus());
+        menuItem.setType(menuItemRequest.getType());
+        menuItem.setImage_path(menuItemRequest.getImage_path());
+        menuItem.setDate_added(menuItemRequest.getDate_added());
         return menuItem;
     }
 
