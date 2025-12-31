@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import BunnyCafeIsland.DTO.Request.MenuItemRequest;
+import BunnyCafeIsland.DTO.Request.MenuItemDTORequest;
 import BunnyCafeIsland.DTO.Response.MenuItemResponse;
 import BunnyCafeIsland.Service.Interface.IMenuItemService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,9 @@ import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 @Service
 public class MenuItemService implements IMenuItemService {
 
-    private MenuItemRepository menuItemRepository;
+    private final MenuItemRepository menuItemRepository;
+
+    //TODO: All service method must only accept DTO Request and return as DTO Response
 
     @Autowired
     public MenuItemService(MenuItemRepository menuItemRepository) {
@@ -85,21 +87,21 @@ public class MenuItemService implements IMenuItemService {
     }
 
     @Override
-    public MenuItem convertToEntity(MenuItemRequest menuItemRequest) {
+    public MenuItem convertToEntity(MenuItemDTORequest menuItemDTORequest) {
         MenuItem menuItem = new MenuItem();
-        if(menuItemRequest !=null){
-            menuItem.setId(menuItemRequest.getId());
+        if(menuItemDTORequest !=null){
+            menuItem.setId(menuItemDTORequest.getId());
         }else{
             menuItem.setId(0);
         }
-        menuItem.setId(menuItemRequest.getId());
-        menuItem.setName(menuItemRequest.getName());
-        menuItem.setPrice(menuItemRequest.getPrice());
-        menuItem.setDescription(menuItemRequest.getDescription());
-        menuItem.setStatus(menuItemRequest.getStatus());
-        menuItem.setType(menuItemRequest.getType());
-        menuItem.setImage_path(menuItemRequest.getImage_path());
-        menuItem.setDate_added(menuItemRequest.getDate_added());
+        menuItem.setId(menuItemDTORequest.getId());
+        menuItem.setName(menuItemDTORequest.getName());
+        menuItem.setPrice(menuItemDTORequest.getPrice());
+        menuItem.setDescription(menuItemDTORequest.getDescription());
+        menuItem.setStatus(menuItemDTORequest.getStatus());
+        menuItem.setType(menuItemDTORequest.getType());
+        menuItem.setImage_path(menuItemDTORequest.getImage_path());
+        menuItem.setDate_added(menuItemDTORequest.getDate_added());
         return menuItem;
     }
 

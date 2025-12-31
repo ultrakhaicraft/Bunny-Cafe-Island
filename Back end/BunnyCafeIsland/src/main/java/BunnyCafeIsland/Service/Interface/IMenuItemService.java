@@ -1,6 +1,6 @@
 package BunnyCafeIsland.Service.Interface;
 
-import BunnyCafeIsland.DTO.Request.MenuItemRequest;
+import BunnyCafeIsland.DTO.Request.MenuItemDTORequest;
 import BunnyCafeIsland.DTO.Response.MenuItemResponse;
 import BunnyCafeIsland.Entity.MenuItem;
 
@@ -12,5 +12,5 @@ public interface IMenuItemService {
     List<MenuItem> getAll();
     void delete(int id);
     MenuItemResponse convertToDTO(MenuItem menuItem);
-    MenuItem convertToEntity(MenuItemRequest menuItemRequest);
+    MenuItem convertToEntity(MenuItemDTORequest menuItemDTORequest);
 }

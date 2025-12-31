@@ -3,75 +3,71 @@ package BunnyCafeIsland.API;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
-import BunnyCafeIsland.Entity.MenuItem;
 import BunnyCafeIsland.Exception.BadRequestException;
-import BunnyCafeIsland.Service.MenuItemService;
+import BunnyCafeIsland.Service.AdoptionFormService;
+import BunnyCafeIsland.Entity.AdoptionForm;
+
 
 public class AdoptionFormAPI {
-    /* 
-    private MenuItemService menuItemService;
+
+    private AdoptionFormService adoptionFormService;
 
     @Autowired
-    public AdoptionFormAPI(MenuItemService menuItemService){
-        this.menuItemService=menuItemService;
+    public AdoptionFormAPI(AdoptionFormService adoptionFormService){
+        this.adoptionFormService=adoptionFormService;
     }
     
-    @GetMapping("/menuItems")
-    public List<MenuItem> getAllBunny() {
-        List<MenuItem> bunnyList = menuItemService.getAllMenuItems();
-        return bunnyList;
+    @GetMapping("/adoptionForms")
+    public List<AdoptionForm> getAllBunny() {
+        List<AdoptionForm> adoptionFormList = adoptionFormService.getAllAdoptionForms();
+        return adoptionFormList;
     }
 
-    @GetMapping("/menuItems/{menuItemId}")
-    public MenuItem getABunny(@PathVariable int menuItemId) {
-        MenuItem aMenuItem = menuItemService.getMenuItemById(menuItemId);
-        if(aMenuItem==null){
-            throw new BadRequestException("Menu Item not found - ID: "+menuItemId);
+    @GetMapping("/adoptionForms/{adoptionFormId}")
+    public AdoptionForm getABunny(@PathVariable int adoptionFormId) {
+        AdoptionForm adoptionForm = adoptionFormService.getAdoptionRequestById(adoptionFormId);
+        if(adoptionForm==null){
+            throw new BadRequestException("Adoption Form not found - ID: "+adoptionFormId);
         }
-        return aMenuItem;
+        return adoptionForm;
     }
 
-    @PostMapping("/menuItems")
-    public MenuItem addBunny(@RequestBody MenuItem aMenuItem) {
-        aMenuItem.setId(0);
-        MenuItem dbMenuItem=menuItemService.save(aMenuItem);
+    @PostMapping("/adoptionForms")
+    public AdoptionForm addBunny(@RequestBody AdoptionForm adoptionForm) {
+        adoptionForm.setId(0);
+        AdoptionForm adoptionForm1=adoptionFormService.save(adoptionForm);
         
-        return dbMenuItem;
+        return adoptionForm1;
     }
     
-    @PutMapping("/menuItems")
-    public MenuItem updateBunny(@RequestBody MenuItem aMenuItem) {
-        MenuItem dbMenuItem=menuItemService.save(aMenuItem);
-        return dbMenuItem;
+    @PutMapping("/adoptionForms")
+    public AdoptionForm updateBunny(@RequestBody AdoptionForm adoptionForm) {
+        AdoptionForm adoptionForm1=adoptionFormService.save(adoptionForm);
+        return adoptionForm1;
     }
 
-    /*@PatchMapping("/menuItems/{menuItemId}")
-    public MenuItem changeMenuItemStatus(@PathVariable int bunnyId, @RequestParam AvailabilityStatus status) {
-        MenuItem aMenuItem = menuItemService.getBunnyById(bunnyId);
+    @DeleteMapping("/adoptionForms/{adoptionFormId}")
+    public String deleteBunny(@PathVariable int adoptionFormId) {
+        AdoptionForm adoptionForm = adoptionFormService.getAdoptionRequestById(adoptionFormId);
+        if(adoptionForm==null){
+            throw new BadRequestException("Menu Item not found  ID: "+adoptionFormId);
+        }
+        adoptionFormService.deleteAdoptionRequestById(adoptionFormId);
+        return "Delete Adoption Form ID: "+adoptionFormId;
+    }
+
+    /*
+    @PatchMapping("/menuItems/{menuItemId}/status")
+    public AdoptionForm changeMenuItemStatus(@PathVariable int bunnyId, @RequestParam AvailabilityStatus status) {
+        AdoptionForm aMenuItem = adoptionFormService.getAdoptionRequestById(bunnyId);
         if(aMenuItem==null){
             throw new BadRequestException("Bunny not found  ID: "+bunnyId);
         }
-        MenuItem dbMenuItem=menuItemService.changeStatus(bunnyId, status);
+        AdoptionForm dbMenuItem=adoptionFormService.changeStatus(bunnyId, status);
         return dbMenuItem;
-    }*/
-    
-    /* 
-    @DeleteMapping("/menuItems/{menuItemId}")
-    public String deleteBunny(@PathVariable int menuItemId) {
-        MenuItem aBunny = menuItemService.getMenuItemById(menuItemId);
-        if(aBunny==null){
-            throw new BadRequestException("Menu Item not found  ID: "+menuItemId);
-        }
-        menuItemService.deleteMenuItemById(menuItemId);
-        return "Delete Menu Item ID: "+menuItemId;
     }
-
     */
+
 }

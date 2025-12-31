@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import BunnyCafeIsland.DTO.Request.MenuItemRequest;
+import BunnyCafeIsland.DTO.Request.MenuItemDTORequest;
 import BunnyCafeIsland.DTO.Response.MenuItemResponse;
 import BunnyCafeIsland.DTO.Response.SingleMessageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,15 +55,15 @@ public class MenuItemAPI {
     }
 
     @PostMapping("/menuItems")
-    public MenuItemResponse add(@RequestBody MenuItemRequest menuItemRequest) {
-        MenuItem menuItem=menuItemService.convertToEntity(menuItemRequest);
+    public MenuItemResponse add(@RequestBody MenuItemDTORequest menuItemDTORequest) {
+        MenuItem menuItem=menuItemService.convertToEntity(menuItemDTORequest);
         MenuItem dbMenuItem=menuItemService.save(menuItem);
         return menuItemService.convertToDTO(dbMenuItem);
     }
     
     @PutMapping("/menuItems")
-    public MenuItemResponse update(@RequestBody MenuItemRequest menuItemRequest) {
-        MenuItem menuItem=menuItemService.convertToEntity(menuItemRequest);
+    public MenuItemResponse update(@RequestBody MenuItemDTORequest menuItemDTORequest) {
+        MenuItem menuItem=menuItemService.convertToEntity(menuItemDTORequest);
         MenuItem dbMenuItem=menuItemService.save(menuItem);
         return menuItemService.convertToDTO(dbMenuItem);
     }
