@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 
+import BunnyCafeIsland.Service.Interface.IReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,9 +13,9 @@ import BunnyCafeIsland.Exception.BadRequestException;
 import BunnyCafeIsland.Repository.ReservationRepository;
 
 @Service
-public class ReservationService {
+public class ReservationService implements IReservationService {
 
-    private ReservationRepository reservationRepository;
+    private final ReservationRepository reservationRepository;
 
     @Autowired
     public ReservationService(ReservationRepository reservationRepository) {

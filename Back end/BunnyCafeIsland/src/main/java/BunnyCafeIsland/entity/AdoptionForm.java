@@ -20,6 +20,9 @@ import java.sql.Date;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
+
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
@@ -60,7 +63,4 @@ public class AdoptionForm {
     @Enumerated(EnumType.STRING)
     @Column(name="staus")
     private AdoptionFormStatus status;
-
-
-    
 }

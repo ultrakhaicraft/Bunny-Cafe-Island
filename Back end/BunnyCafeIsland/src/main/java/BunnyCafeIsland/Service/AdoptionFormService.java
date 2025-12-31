@@ -3,6 +3,7 @@ package BunnyCafeIsland.Service;
 import java.util.List;
 import java.util.Optional;
 
+import BunnyCafeIsland.Service.Interface.IAdoptionFormService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +14,7 @@ import BunnyCafeIsland.Repository.AdoptionFormRepository;
 import BunnyCafeIsland.Repository.MenuItemRepository;
 
 @Service
-public class AdoptionFormService {
+public class AdoptionFormService implements IAdoptionFormService {
 
     private AdoptionFormRepository adoptionFormRepository;
 

@@ -9,7 +9,7 @@ import BunnyCafeIsland.Entity.Staff;
 
 public interface StaffRepository extends JpaRepository<Staff, Integer> {
     Staff findByPhone(String phone);
-    Optional<Staff> findByEmail(String email);
+    Optional<Staff>     findByEmail(String email);
     List<Staff> findByName(String name);
     
 }
