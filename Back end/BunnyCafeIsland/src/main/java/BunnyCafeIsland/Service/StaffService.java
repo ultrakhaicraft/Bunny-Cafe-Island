@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import BunnyCafeIsland.Service.Interface.IStaffService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,9 +19,9 @@ import BunnyCafeIsland.Repository.StaffRepository;
 
 
 @Service
-public class StaffService {
+public class StaffService implements IStaffService {
 
-    private StaffRepository staffRepository;
+    private final StaffRepository staffRepository;
 
 	@Autowired
 	public StaffService(StaffRepository staffRepository){

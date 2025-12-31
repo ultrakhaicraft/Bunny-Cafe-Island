@@ -1,4 +1,4 @@
-package BunnyCafeIsland.DTO;
+package BunnyCafeIsland.DTO.Response;
 
 
 import lombok.AllArgsConstructor;
@@ -10,8 +10,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthenticationResponse {
-
-    private  String token;
-    private UserInfoResponse userInfo;
+public class SingleMessageResponse {
+    private String message;
 }

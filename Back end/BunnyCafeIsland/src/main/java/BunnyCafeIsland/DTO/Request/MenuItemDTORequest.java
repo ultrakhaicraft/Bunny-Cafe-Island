@@ -1,4 +1,4 @@
-package BunnyCafeIsland.DTO;
+package BunnyCafeIsland.DTO.Request;
 
 import BunnyCafeIsland.Enums.MenuStatus;
 import BunnyCafeIsland.Enums.MenuType;
@@ -14,9 +14,9 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class MenuItemDTO {
+public class MenuItemDTORequest {
 
-    private int id;
+
     private String name;
     private int price;
     private String description;
@@ -24,7 +24,5 @@ public class MenuItemDTO {
     private MenuType type;
     private String image_path;
     private LocalDateTime date_added;
-
-
 
 }

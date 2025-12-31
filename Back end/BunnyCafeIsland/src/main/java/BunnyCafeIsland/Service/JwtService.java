@@ -1,5 +1,6 @@
 package BunnyCafeIsland.Service;
 
+import BunnyCafeIsland.Service.Interface.IJWTService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -18,10 +19,10 @@ import java.util.Objects;
 import java.util.function.Function;
 
 @Service
-public class JwtService {
+public class JwtService implements IJWTService {
 
 
-    //TODO: give secret key
+    //TODO: Move this to a properties file
     private static final String SECRET_KEY="/M+4vL/U/oHiB/nvApMqqWtMaoRPddB49R/yI9wkq7VpuaQwCb8141KkRiyAmrwA";
 
     public String getUserEmailFromToken(String token){
@@ -37,7 +38,7 @@ public class JwtService {
         return expiration.before(new Date());
     }
 
-    public<T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver){
+    public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver){
         final Claims claims=getAllClaimsFromToken(token);
         return claimsResolver.apply(claims);
     }

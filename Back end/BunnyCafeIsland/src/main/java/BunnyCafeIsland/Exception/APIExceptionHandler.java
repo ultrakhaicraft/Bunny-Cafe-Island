@@ -5,12 +5,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+//Catch All Exception Globally and Handle it
 @ControllerAdvice
 public class APIExceptionHandler {
 
-    //Catch All Exception, Global
-    @ExceptionHandler
-    public ResponseEntity<ErrorResponse> handleException (Exception exception){
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<ErrorResponse> handleBadRequest (Exception exception){
 
         ErrorResponse error = new ErrorResponse();
         error.setStatus(HttpStatus.BAD_REQUEST.value());
@@ -20,20 +20,17 @@ public class APIExceptionHandler {
         return new ResponseEntity<ErrorResponse>(error, HttpStatus.BAD_REQUEST);
     }
 
-
-    //Ignore this
-    /* Basic not found exception
-    @ExceptionHandler
-    public ResponseEntity<ErrorResponse> handleException (BadRequestException exception){
-        
-        //Create ErrorResponse object
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleNotFound (Exception exception){
 
         ErrorResponse error = new ErrorResponse();
         error.setStatus(HttpStatus.NOT_FOUND.value());
         error.setMessage(exception.getMessage());
         error.setTimeStamp(System.currentTimeMillis());
 
-        //Return ResponseEntity
-        return new ResponseEntity<>(error,HttpStatus.NOT_FOUND);
-    }*/
+        return new ResponseEntity<ErrorResponse>(error, HttpStatus.NOT_FOUND);
+    }
+
+
+
 }

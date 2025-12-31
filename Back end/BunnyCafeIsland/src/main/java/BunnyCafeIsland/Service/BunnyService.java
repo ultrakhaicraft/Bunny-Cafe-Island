@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import BunnyCafeIsland.Entity.MedicalRecord;
 import BunnyCafeIsland.Enums.Gender;
+import BunnyCafeIsland.Service.Interface.IBunnyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +22,7 @@ import BunnyCafeIsland.Repository.BunnyRepository;
 
 
 @Service
-public class BunnyService {
+public class BunnyService implements IBunnyService {
 
 	//Intention DAO/Repository: Bunny and Medical Record
 

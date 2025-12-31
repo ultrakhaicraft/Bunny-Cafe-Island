@@ -3,9 +3,11 @@ package BunnyCafeIsland.Entity;
 import java.util.Date;
 
 import jakarta.persistence.*;
+import lombok.Data;
 import org.hibernate.grammars.hql.HqlParser.DateTimeContext;
 
 @Entity
+@Data
 @Table(name="medicalrecord")
 public class MedicalRecord {
     
