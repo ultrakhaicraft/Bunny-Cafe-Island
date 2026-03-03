@@ -7,6 +7,6 @@ Frontend: React
 Backend: Java Spring Boot
 
 # Status
-This project is now hiatus indefinitely
+This project is now in hiatus indefinitely
 
 
