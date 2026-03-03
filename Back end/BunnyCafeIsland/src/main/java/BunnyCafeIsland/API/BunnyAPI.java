@@ -1,7 +1,18 @@
 package BunnyCafeIsland.API;
 
+import BunnyCafeIsland.DTO.Request.BunnyInfoDTORequest;
+import BunnyCafeIsland.DTO.Response.ApiResponse;
+import BunnyCafeIsland.DTO.Response.BunnyDetailDTOResponse;
+import BunnyCafeIsland.DTO.Response.BunnyViewDTOResponse;
+import BunnyCafeIsland.DTO.Response.MenuItemDTOResponse;
+import BunnyCafeIsland.Service.Interface.IBunnyService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.nio.file.Path;
 import java.util.*;
 
 import BunnyCafeIsland.Entity.Bunny;
@@ -29,7 +40,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class BunnyAPI {
 
     
-    private BunnyService bunnyService;
+    private final IBunnyService bunnyService;
 
     @Autowired
     public BunnyAPI(BunnyService bunnyService){
@@ -37,52 +48,58 @@ public class BunnyAPI {
     }
     
     @GetMapping("/bunnies")
-    public List<Bunny> getAllBunny() {
-        List<Bunny> bunnyList = bunnyService.getAllBunny();
-        return bunnyList;
+    public ApiResponse<Page<BunnyViewDTOResponse>> getAllBunnyWithPagination(@RequestParam(defaultValue = "0") int page,
+                                                                            @RequestParam(defaultValue = "5") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<BunnyViewDTOResponse> data = bunnyService.GetAllBunniesPaged(pageable);
+        return ApiResponse.success("Get all Bunnies as Page success",data);
     }
 
     @GetMapping("/bunnies/{bunnyId}")
-    public Bunny getABunny(@PathVariable int bunnyId) {
-        Bunny bunny = bunnyService.getBunnyById(bunnyId);
-        if(bunny==null){
+    public ApiResponse<BunnyDetailDTOResponse> getABunny(@PathVariable int bunnyId) {
+        BunnyDetailDTOResponse response = bunnyService.getBunnyById(bunnyId);
+        if(response==null){
             throw new BadRequestException("Bunny not found - ID: "+bunnyId);
         }
-        return bunny;
+        return ApiResponse.success("Get a Bunny success", response);
     }
 
     @PostMapping("/bunnies")
-    public Bunny addBunny(@RequestBody Bunny aBunny) {
-        aBunny.setId(0);
-        Bunny dbReservation=bunnyService.save(aBunny);
-        
-        return dbReservation;
+    public ApiResponse<BunnyViewDTOResponse> addBunny(@RequestBody BunnyInfoDTORequest dtoRequest) {
+        BunnyViewDTOResponse response = bunnyService.create(dtoRequest);
+        return ApiResponse.success("Create new bunny success", response);
     }
     
-    @PutMapping("/bunnies")
-    public Bunny updateBunny(@RequestBody Bunny aBunny) {
-        Bunny dbReservation=bunnyService.save(aBunny);
-        return dbReservation;
+    @PutMapping("/bunnies/{bunnyId}")
+    public ApiResponse<BunnyViewDTOResponse> updateBunny(@RequestBody BunnyInfoDTORequest dtoRequest, @PathVariable int bunnyId) {
+        BunnyViewDTOResponse response=bunnyService.update(dtoRequest,bunnyId);
+        return ApiResponse.success("Update bunny success", response);
     }
 
     @PatchMapping("/bunnies/{bunnyId}")
-    public Bunny changeBunnyStatus(@PathVariable int bunnyId, @RequestParam AvailabilityStatus status) {
-        Bunny aBunny = bunnyService.getBunnyById(bunnyId);
-        if(aBunny==null){
+    public ApiResponse<BunnyViewDTOResponse> changeBunnyStatus(@PathVariable int bunnyId, @RequestParam AvailabilityStatus status) {
+        BunnyDetailDTOResponse result = bunnyService.getBunnyById(bunnyId);
+        if(result==null){
             throw new BadRequestException("Bunny not found  ID: "+bunnyId);
         }
-        Bunny dBunny=bunnyService.changeStatus(bunnyId, status);
-        return dBunny;
+        BunnyViewDTOResponse dtoResponse=bunnyService.changeAvailabilityStatus(bunnyId, status);
+        return ApiResponse.success("Change status of Bunny successful", dtoResponse);
+    }
+
+    @PatchMapping("/bunnies/add-medical-record/{bunnyId}")
+    public ApiResponse<Integer> addMedicalRecordToBunny(@PathVariable int bunnyId, @RequestParam int medicalRecordId) {
+        bunnyService.addMedicalRecordToBunny(bunnyId,medicalRecordId);
+        return ApiResponse.success("Add Medical Record to Bunny success",bunnyId);
     }
     
     @DeleteMapping("/bunnies/{bunnyId}")
-    public String deleteBunny(@PathVariable int bunnyId) {
-        Bunny aBunny = bunnyService.getBunnyById(bunnyId);
-        if(aBunny==null){
+    public ApiResponse<Integer> deleteBunny(@PathVariable int bunnyId) {
+        BunnyDetailDTOResponse response = bunnyService.getBunnyById(bunnyId);
+        if(response==null){
             throw new BadRequestException("Bunny not found  ID: "+bunnyId);
         }
-        bunnyService.deleteBunnyById(bunnyId);
-        return "Delete Bunny ID: "+bunnyId;
+        bunnyService.delete(bunnyId);
+        return ApiResponse.success("Delete Bunny success " + bunnyId,bunnyId);
     }
 
     

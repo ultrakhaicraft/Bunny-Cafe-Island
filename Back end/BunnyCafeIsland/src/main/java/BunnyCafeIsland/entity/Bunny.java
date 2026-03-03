@@ -9,8 +9,12 @@ import java.util.List;
 
 import BunnyCafeIsland.Enums.AvailabilityStatus;
 import BunnyCafeIsland.Enums.Gender;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
 @Entity
+@Data
+@AllArgsConstructor
 @Table(name="bunny")
 public class Bunny {
 

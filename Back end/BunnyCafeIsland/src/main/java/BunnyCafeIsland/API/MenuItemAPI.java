@@ -5,8 +5,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import BunnyCafeIsland.DTO.Request.MenuItemDTORequest;
-import BunnyCafeIsland.DTO.Response.MenuItemResponse;
-import BunnyCafeIsland.DTO.Response.SingleMessageResponse;
+import BunnyCafeIsland.DTO.Response.ApiResponse;
+import BunnyCafeIsland.DTO.Response.MenuItemDTOResponse;
+import BunnyCafeIsland.Service.Interface.IMenuItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,7 +15,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import BunnyCafeIsland.Entity.MenuItem;
 import BunnyCafeIsland.Exception.BadRequestException;
 import BunnyCafeIsland.Service.MenuItemService;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,10 +24,10 @@ import static org.springframework.http.MediaType.IMAGE_JPEG_VALUE;
 import static org.springframework.http.MediaType.IMAGE_PNG_VALUE;
 
 @RestController
-@RequestMapping("/api/management")
+@RequestMapping("/api")
 public class MenuItemAPI {
 
-    private MenuItemService menuItemService;
+    private final IMenuItemService menuItemService;
 
     @Autowired
     public MenuItemAPI(MenuItemService menuItemService){
@@ -38,47 +38,44 @@ public class MenuItemAPI {
 
     @ResponseBody
     @GetMapping("/menuItems")
-    public Page<MenuItem> getAllWithPagination ( @RequestParam(defaultValue = "0") int page,
-                                                 @RequestParam(defaultValue = "5") int size){
+    public ApiResponse<Page<MenuItemDTOResponse>> getAllMenuItemWithPagination(@RequestParam(defaultValue = "0") int page,
+                                                                               @RequestParam(defaultValue = "5") int size){
         Pageable pageable = PageRequest.of(page, size);
-        return menuItemService.getAllPageable(pageable);
+        Page<MenuItemDTOResponse> data = menuItemService.getAllPageable(pageable);
+        return ApiResponse.success("Get all Menu Item as Page success",data);
 
     }
 
     @GetMapping("/menuItems/{menuItemId}")
-    public MenuItemResponse get(@PathVariable int menuItemId) {
-        MenuItem menuItem = menuItemService.getById(menuItemId);
-        if(menuItem==null){
+    public ApiResponse<MenuItemDTOResponse> getMenuItemById(@PathVariable int menuItemId) {
+        MenuItemDTOResponse response = menuItemService.getById(menuItemId);
+        if(response==null){
             throw new BadRequestException("Menu Item not found - ID: "+menuItemId);
         }
-        return menuItemService.convertToDTO(menuItem);
+        return ApiResponse.success("Get a Menu Item success", response);
     }
 
     @PostMapping("/menuItems")
-    public MenuItemResponse add(@RequestBody MenuItemDTORequest menuItemDTORequest) {
-        MenuItem menuItem=menuItemService.convertToEntity(menuItemDTORequest);
-        MenuItem dbMenuItem=menuItemService.save(menuItem);
-        return menuItemService.convertToDTO(dbMenuItem);
+    public ApiResponse<MenuItemDTOResponse> addMenuItem(@RequestBody MenuItemDTORequest menuItemDTORequest) {
+        MenuItemDTOResponse response = menuItemService.add(menuItemDTORequest);
+        return ApiResponse.success("Create new menu items success", response);
     }
     
-    @PutMapping("/menuItems")
-    public MenuItemResponse update(@RequestBody MenuItemDTORequest menuItemDTORequest) {
-        MenuItem menuItem=menuItemService.convertToEntity(menuItemDTORequest);
-        MenuItem dbMenuItem=menuItemService.save(menuItem);
-        return menuItemService.convertToDTO(dbMenuItem);
+    @PutMapping("/menuItems/{menuItemId}")
+    public ApiResponse<MenuItemDTOResponse> updateMenuItem(@RequestBody MenuItemDTORequest menuItemDTORequest, @PathVariable int menuItemId) {
+        MenuItemDTOResponse response = menuItemService.update(menuItemId,menuItemDTORequest);
+        return ApiResponse.success("Update a menu items success", response);
+
     }
 
     @DeleteMapping("/menuItems/{menuItemId}")
-    public SingleMessageResponse delete(@PathVariable int menuItemId) {
-        MenuItem aBunny = menuItemService.getById(menuItemId);
-        if(aBunny==null){
+    public ApiResponse<Integer> deleteMenuItem(@PathVariable int menuItemId) {
+        MenuItemDTOResponse data = menuItemService.getById(menuItemId);
+        if(data==null){
             throw new BadRequestException("Menu Item not found  ID: "+menuItemId);
         }
         menuItemService.delete(menuItemId);
-
-        SingleMessageResponse responseMessage = new SingleMessageResponse();
-        responseMessage.setMessage("Delete Menu Item " + menuItemId);
-        return responseMessage;
+        return ApiResponse.success("Delete Menu Item " + menuItemId,menuItemId);
     }
 
 

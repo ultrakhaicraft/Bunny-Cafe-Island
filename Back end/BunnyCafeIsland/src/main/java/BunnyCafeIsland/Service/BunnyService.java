@@ -1,154 +1,195 @@
 package BunnyCafeIsland.Service;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-
+import BunnyCafeIsland.DTO.Request.BunnyInfoDTORequest;
+import BunnyCafeIsland.DTO.Request.ReservationDTORequest;
+import BunnyCafeIsland.DTO.Response.BunnyDetailDTOResponse;
+import BunnyCafeIsland.DTO.Response.BunnyViewDTOResponse;
+import BunnyCafeIsland.DTO.Response.MedicalRecordDTOResponse;
 import BunnyCafeIsland.Entity.MedicalRecord;
-import BunnyCafeIsland.Enums.Gender;
+import BunnyCafeIsland.Entity.Reservation;
+import BunnyCafeIsland.Exception.BadRequestException;
+import BunnyCafeIsland.Repository.MedicalRecordRepository;
 import BunnyCafeIsland.Service.Interface.IBunnyService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import BunnyCafeIsland.Entity.Bunny;
 
 import BunnyCafeIsland.Enums.AvailabilityStatus;
 
-import BunnyCafeIsland.Exception.BadRequestException;
-
 import BunnyCafeIsland.Repository.BunnyRepository;
+
+import java.util.List;
+import java.util.Optional;
 
 
 @Service
 public class BunnyService implements IBunnyService {
 
-	//Intention DAO/Repository: Bunny and Medical Record
-
     private final BunnyRepository bunnyRepository;
+	private final MedicalRecordRepository medicalRecordRepository;
 
 	@Autowired
-	public BunnyService(BunnyRepository bunnyRepository){
+	public BunnyService(BunnyRepository bunnyRepository, MedicalRecordRepository medicalRecordRepository){
+		this.medicalRecordRepository = medicalRecordRepository;
 		this.bunnyRepository=bunnyRepository;
 	}
 
-	
 
-	public List<Bunny> getAllBunny() {
-		return bunnyRepository.findAll();
+	@Override
+	public Page<BunnyViewDTOResponse> GetAllBunniesPaged(Pageable pageable) {
+		Page<Bunny> data = bunnyRepository.findAll(pageable);
+		return data.map(this::mapToViewDTO);
 	}
 
-	public List<Bunny> getBunnyByBreed(String breed) {
-		List<Bunny> result = bunnyRepository.findByBreed(breed);
-		return result;
-	}
-
-	
-	public Bunny getBunnyById(int id) {
+	@Override
+	public BunnyDetailDTOResponse getBunnyById(int id) {
 		Optional<Bunny> result =bunnyRepository.findById(id);
-		Bunny aBunny=null;
-		if(result.isPresent()) {
-			aBunny=result.get();
+		Bunny bunny =null;
+		if(result.isPresent()){
+			bunny=result.get();
 		}else{
-			throw new BadRequestException( "Bunny not found - ID: "+id);
-
+			throw new BadRequestException("Bunny not found - ID: "+id);
 		}
-		return aBunny;
+		BunnyDetailDTOResponse bunnyInfoResponse= mapToDetailDTO(bunny);
+
+		//Add list of medical record from bunny
+		List<MedicalRecordDTOResponse> medicalRecordList = bunny.getMedicalRecordsList().stream()
+				.map(this::mapMedicalRecordToDTO).toList();
+
+		bunnyInfoResponse.setMedicalRecordsList(medicalRecordList);
+
+		return bunnyInfoResponse;
 	}
 
-	public Bunny save(Bunny aBunny){
-        return bunnyRepository.save(aBunny);
-    }
-
-
-    public Bunny changeStatus(int id, AvailabilityStatus status){
-		Bunny newBun =getBunnyById(id);
-		if(newBun==null) {
-			throw new BadRequestException( "Bunny not found, exiting change status - ID: "+id);
-		}
-		newBun.setAvailabilityStatus(status);
-		save(newBun);
-		return newBun;
+	@Override
+	public BunnyViewDTOResponse create(BunnyInfoDTORequest dtoRequest) {
+		Bunny bunny = mapToEntity(dtoRequest);
+		Bunny addedBunny = bunnyRepository.save(bunny);
+		return mapToViewDTO(addedBunny);
 	}
 
-	public void deleteBunnyById(int id){
-        bunnyRepository.deleteById(id);
-    }
+	@Override
+	public BunnyViewDTOResponse update(BunnyInfoDTORequest dtoRequest, int bunnyId) {
+		Bunny exisitingBunny = bunnyRepository.findById(bunnyId)
+				.orElseThrow(() -> new BadRequestException("Bunny not found - ID: " + bunnyId));
+
+		updateEntityFromDTO(exisitingBunny, dtoRequest);
+
+		Bunny updatedBunny= bunnyRepository.save(exisitingBunny);
+		return mapToViewDTO(updatedBunny);
+	}
+
+	@Override
+	public BunnyViewDTOResponse changeAvailabilityStatus(int id, AvailabilityStatus status) {
+		Bunny exisitingBunny = bunnyRepository.findById(id)
+				.orElseThrow(() -> new BadRequestException("Bunny not found - ID: " + id));
+
+		exisitingBunny.setAvailabilityStatus(status);
+
+		Bunny updatedBunny= bunnyRepository.save(exisitingBunny);
+		return mapToViewDTO(updatedBunny);
+	}
+
+	@Override
+	public void addMedicalRecordToBunny(int bunnyId, int medicalRecordId) {
+		//Precondition: Medical Record and Bunny with the Id must exist/created in the database
+		MedicalRecord existingMedicalRecord = medicalRecordRepository.findById(medicalRecordId)
+				.orElseThrow(() -> new BadRequestException("Medical record not found - ID: " + medicalRecordId));
+
+		Bunny exisitingBunny = bunnyRepository.findById(bunnyId)
+				.orElseThrow(() -> new BadRequestException("Bunny not found - ID: " + bunnyId));
+
+		//Add a medical record to bunny
+		exisitingBunny.getMedicalRecordsList().add(existingMedicalRecord);
+		bunnyRepository.save(exisitingBunny);
+	}
+
+	@Override
+	public void delete(int id) {
+		bunnyRepository.deleteById(id);
+	}
 
 
-	/*
-	Not in a scope, just a test run
-	*/
-	public void addBunnyWithMedicalRecordExample() throws ParseException {
-		try {
-
-			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-			Date date1 = dateFormat.parse("2024-10-03");
-			Date date2 = dateFormat.parse("2024-08-21");
-			Date date3 = dateFormat.parse("2024-03-15");
-
-			Bunny bunny1 = new Bunny(
-					"Fluffy",
-					"Lop",
-					Gender.Female,
-					2,
-					"A very playful and friendly bunny.",
-					"https://example.com/images/fluffy.jpg",
-					AvailabilityStatus.Available,
-					"Healthy",
-					new Date(),
-					null
-			);
-
-
-
-			Bunny bunny2 = new Bunny(
-					"Snowball",
-					"Dutch",
-					Gender.Male,
-					1,
-					"A calm and gentle bunny.",
-					"https://example.com/images/snowball.jpg",
-					AvailabilityStatus.Available,
-					"Healthy",
-					date3,
-					null
-			);
-
-			MedicalRecord record1 = new MedicalRecord(
-					new Date(),
-					"Vaccination and general checkup",
-					"Administered vaccines and general health inspection",
-					"Happy Tails Veterinary Clinic"
-
-			);
-
-			MedicalRecord record2 = new MedicalRecord(
-					date2,
-					"Dental care and grooming",
-					"Trimmed overgrown teeth and nails",
-					"Bunny Wellness Center"
-
-			);
-
-			MedicalRecord record3 = new MedicalRecord(
-					date3,
-					"Injury treatment",
-					"Treated minor injury on the paw",
-					"Pet Care Hospital"
-
-			);
-
-			bunny1.addOneMedicalRecord(record1);
-			bunny1.addOneMedicalRecord(record3);
-
-			System.out.println("Saving...");
-			bunnyRepository.save(bunny2);
-			System.out.println("Saving done !!");
-
-		} catch (ParseException e) {
-			e.printStackTrace();
+	private BunnyViewDTOResponse mapToViewDTO(Bunny bunny) {
+		BunnyViewDTOResponse bunnyViewDTOResponse = new BunnyViewDTOResponse();
+		if(bunny!=null){
+			bunnyViewDTOResponse.setId(bunny.getId());
+		}else{
+			bunnyViewDTOResponse.setId(0);
 		}
+		bunnyViewDTOResponse.setName(bunny.getName());
+		bunnyViewDTOResponse.setBreed(bunny.getBreed());
+		bunnyViewDTOResponse.setGender(bunny.getGender());
+		bunnyViewDTOResponse.setAge(bunny.getAge());
+		bunnyViewDTOResponse.setImage(bunny.getImage());
+		bunnyViewDTOResponse.setDescription(bunny.getDescription());
+		bunnyViewDTOResponse.setAvailabilityStatus(bunny.getAvailabilityStatus());
+		bunnyViewDTOResponse.setHealthStatus(bunny.getHealthStatus());
+		bunnyViewDTOResponse.setDateAdded(bunny.getDateAdded());
+		return bunnyViewDTOResponse;
+	}
+
+	private BunnyDetailDTOResponse mapToDetailDTO(Bunny bunny) {
+		BunnyDetailDTOResponse bunnyDetailDTOResponse = new BunnyDetailDTOResponse();
+		if(bunny!=null){
+			bunnyDetailDTOResponse.setId(bunny.getId());
+		}else{
+			bunnyDetailDTOResponse.setId(0);
+		}
+		bunnyDetailDTOResponse.setName(bunny.getName());
+		bunnyDetailDTOResponse.setBreed(bunny.getBreed());
+		bunnyDetailDTOResponse.setGender(bunny.getGender());
+		bunnyDetailDTOResponse.setAge(bunny.getAge());
+		bunnyDetailDTOResponse.setImage(bunny.getImage());
+		bunnyDetailDTOResponse.setDescription(bunny.getDescription());
+		bunnyDetailDTOResponse.setAvailabilityStatus(bunny.getAvailabilityStatus());
+		bunnyDetailDTOResponse.setHealthStatus(bunny.getHealthStatus());
+		bunnyDetailDTOResponse.setDateAdded(bunny.getDateAdded());
+		return bunnyDetailDTOResponse;
+	}
+
+	private MedicalRecordDTOResponse mapMedicalRecordToDTO(MedicalRecord medicalRecord){
+		MedicalRecordDTOResponse medicalRecordDTOResponse = new MedicalRecordDTOResponse();
+		if(medicalRecord!=null){
+			medicalRecordDTOResponse.setId(medicalRecord.getId());
+		}else{
+			medicalRecordDTOResponse.setId(0);
+		}
+		medicalRecordDTOResponse.setId(medicalRecord.getId());
+		medicalRecordDTOResponse.setClinic(medicalRecord.getClinic());
+		medicalRecordDTOResponse.setMedicalHistory(medicalRecord.getMedicalHistory());
+		medicalRecordDTOResponse.setTreatmentDetails(medicalRecord.getTreatmentDetails());
+		medicalRecordDTOResponse.setDate(medicalRecord.getDate());
+		return medicalRecordDTOResponse;
+	}
+
+	private Bunny mapToEntity(BunnyInfoDTORequest bunnyInfoDTORequest) {
+		Bunny bunny = new Bunny();
+		bunny.setId(0); //Set Id as 0 to trigger auto increment
+		bunny.setName(bunnyInfoDTORequest.getName());
+		bunny.setAge(bunnyInfoDTORequest.getAge());
+		bunny.setBreed(bunnyInfoDTORequest.getBreed());
+		bunny.setGender(bunnyInfoDTORequest.getGender());
+		bunny.setImage(bunnyInfoDTORequest.getImage());
+		bunny.setDescription(bunnyInfoDTORequest.getDescription());
+		bunny.setAvailabilityStatus(bunnyInfoDTORequest.getAvailabilityStatus());
+		bunny.setHealthStatus(bunnyInfoDTORequest.getHealthStatus());
+		bunny.setDateAdded(bunnyInfoDTORequest.getDateAdded());
+		return bunny;
+	}
+
+	private void updateEntityFromDTO(Bunny bunny, BunnyInfoDTORequest bunnyInfoDTORequest) {
+		bunny.setName(bunnyInfoDTORequest.getName());
+		bunny.setAge(bunnyInfoDTORequest.getAge());
+		bunny.setBreed(bunnyInfoDTORequest.getBreed());
+		bunny.setGender(bunnyInfoDTORequest.getGender());
+		bunny.setImage(bunnyInfoDTORequest.getImage());
+		bunny.setDescription(bunnyInfoDTORequest.getDescription());
+		bunny.setAvailabilityStatus(bunnyInfoDTORequest.getAvailabilityStatus());
+		bunny.setHealthStatus(bunnyInfoDTORequest.getHealthStatus());
+		bunny.setDateAdded(bunnyInfoDTORequest.getDateAdded());
 	}
 }

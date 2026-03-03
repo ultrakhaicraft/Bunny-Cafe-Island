@@ -1,10 +1,15 @@
 package BunnyCafeIsland.API;
 
-import java.util.List;
 
-
-
+import BunnyCafeIsland.DTO.Request.StaffInfoDTORequest;
+import BunnyCafeIsland.DTO.Response.ApiResponse;
+import BunnyCafeIsland.DTO.Response.ReservationDTOResponse;
+import BunnyCafeIsland.DTO.Response.StaffInfoDTOResponse;
+import BunnyCafeIsland.Service.Interface.IStaffService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,54 +33,53 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/api")
 public class StaffAPI {
 
-    private StaffService staffService;
+    private final IStaffService staffService;
 
     @Autowired
     public StaffAPI(StaffService staffService){
         this.staffService=staffService;
     }
-    
-    
+
     @GetMapping("/staffs")
-    public List<Staff> getAllStaff() {
-        List<Staff> bunnyList = staffService.getAllStaffs();
-        return bunnyList;
+    public ApiResponse<Page<StaffInfoDTOResponse>> getAllStaffWithPagination(@RequestParam(defaultValue = "0") int page,
+                                                                                      @RequestParam(defaultValue = "5") int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<StaffInfoDTOResponse> data = staffService.getAllStaffsPageable(pageable);
+        return ApiResponse.success("Get all staff as Page success",data);
     }
 
     @GetMapping("/staffs/{staffId}")
-    public Staff getAStaff(@PathVariable int staffId) {
-        Staff aStaff = staffService.getStaffById(staffId);
+    public ApiResponse<StaffInfoDTOResponse> getAStaff(@PathVariable int staffId) {
+        StaffInfoDTOResponse staff = staffService.getStaffById(staffId);
         
-        if(aStaff==null){
+        if(staff ==null){
             throw new BadRequestException("Staff not found - ID: "+staffId);
         }
 
-        return aStaff;
+        return ApiResponse.success("Get a Staff Info success", staff);
+
     }
 
     @PostMapping("/staffs")
-    public Staff addStaff(@RequestBody Staff aStaff) {
-        //If they pass an ID in json, set id to 0.
-        //This is to force a insert of new item rather than update.
-        aStaff.setId(0);
-        Staff dbStaff = staffService.save(aStaff);
-        return dbStaff;
+    public ApiResponse<StaffInfoDTOResponse> addStaff(@RequestBody StaffInfoDTORequest dtoRequest) {
+        StaffInfoDTOResponse response = staffService.create(dtoRequest);
+        return ApiResponse.success("Create new staff success", response);
     }
     
-    @PutMapping("/staffs")
-    public Staff updateStaff(@RequestBody Staff aStaff) {
-        Staff dbStaff = staffService.save(aStaff);
-        return dbStaff;
+    @PutMapping("/staffs/{staffId}")
+    public ApiResponse<StaffInfoDTOResponse> updateStaff(@RequestBody StaffInfoDTORequest dtoRequest, @PathVariable int staffId) {
+        StaffInfoDTOResponse response=staffService.update(dtoRequest, staffId);
+        return ApiResponse.success("Update staff success", response);
     }
 
     @DeleteMapping("/staffs/{staffId}")
-    public String deleteStaff(@PathVariable int staffId){
-        Staff aStaff = staffService.getStaffById(staffId);
-        if(aStaff==null){
+    public ApiResponse<Integer> deleteStaff(@PathVariable int staffId){
+        StaffInfoDTOResponse response = staffService.getStaffById(staffId);
+        if(response==null){
             throw new BadRequestException("Staff not found - ID: "+staffId);
         }
-
-        staffService.hardRemove(staffId);
-        return "Deleted Staff ID: "+ staffId;
+        staffService.delete(staffId);
+        return ApiResponse.success("Delete Reservation with ID: " + staffId,staffId);
     }
 }
