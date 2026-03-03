@@ -31,6 +31,17 @@ public class APIExceptionHandler {
         return new ResponseEntity<ErrorResponse>(error, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<ErrorResponse> handleUnauthorized (Exception exception){
+
+        ErrorResponse error = new ErrorResponse();
+        error.setStatus(HttpStatus.UNAUTHORIZED.value());
+        error.setMessage(exception.getMessage());
+        error.setTimeStamp(System.currentTimeMillis());
+
+        return new ResponseEntity<ErrorResponse>(error, HttpStatus.UNAUTHORIZED);
+    }
+
 
 
 }

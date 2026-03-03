@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class MenuItemResponse {
+public class MenuItemDTOResponse {
     private int id;
     private String name;
     private int price;

@@ -15,8 +15,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MenuItemDTORequest {
-
-
     private String name;
     private int price;
     private String description;

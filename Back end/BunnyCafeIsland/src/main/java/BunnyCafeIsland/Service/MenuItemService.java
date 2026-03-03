@@ -6,9 +6,10 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import BunnyCafeIsland.DTO.Request.MenuItemDTORequest;
-import BunnyCafeIsland.DTO.Response.MenuItemResponse;
+import BunnyCafeIsland.DTO.Response.MenuItemDTOResponse;
 import BunnyCafeIsland.Service.Interface.IMenuItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -29,7 +30,6 @@ public class MenuItemService implements IMenuItemService {
 
     private final MenuItemRepository menuItemRepository;
 
-    //TODO: All service method must only accept DTO Request and return as DTO Response
 
     @Autowired
     public MenuItemService(MenuItemRepository menuItemRepository) {
@@ -37,7 +37,7 @@ public class MenuItemService implements IMenuItemService {
     }
 
     @Override
-    public MenuItem getById(int id) {
+    public MenuItemDTOResponse getById(int id) {
         Optional<MenuItem> result =menuItemRepository.findById(id);
         MenuItem menuItem =null;
         if(result.isPresent()){
@@ -45,22 +45,36 @@ public class MenuItemService implements IMenuItemService {
         }else{
             throw new BadRequestException("Menu Item not found - ID: "+id);
         }
-        return menuItem;
+
+        return mapToDTO(menuItem);
     }
 
     @Override
-    public MenuItem save(MenuItem MenuItem) {
-        MenuItem.setDate_added(LocalDateTime.now());
-        return menuItemRepository.save(MenuItem);
+    public MenuItemDTOResponse add(MenuItemDTORequest dtoRequest) {
+        MenuItem menuItem = mapToEntity(dtoRequest);
+        menuItem.setDate_added(LocalDateTime.now());
+        MenuItem addedItem= menuItemRepository.save(menuItem);
+        return mapToDTO(addedItem);
     }
 
     @Override
-    public List<MenuItem> getAll() {
-            return menuItemRepository.findAll();
+    public MenuItemDTOResponse update(int menuItemId, MenuItemDTORequest dtoRequest) {
+        MenuItem existingMenuItem = menuItemRepository.findById(menuItemId)
+                .orElseThrow(() -> new BadRequestException("Menu Item not found - ID: " + menuItemId));
+
+        updateEntityFromDTO(existingMenuItem, dtoRequest);
+
+        MenuItem updatedItem= menuItemRepository.save(existingMenuItem);
+        return mapToDTO(updatedItem);
     }
 
-    public Page<MenuItem> getAllPageable(Pageable pageable){
-        return menuItemRepository.findAll(pageable);
+
+    @Override
+    public Page<MenuItemDTOResponse> getAllPageable(Pageable pageable){
+        Page<MenuItem> menuItemPage= menuItemRepository.findAll(pageable);
+
+        //Convert to DTO Response page
+        return menuItemPage.map(this::mapToDTO);
     }
 
     @Override
@@ -68,33 +82,28 @@ public class MenuItemService implements IMenuItemService {
         menuItemRepository.deleteById(id);
     }
 
-    @Override
-    public MenuItemResponse convertToDTO(MenuItem menuItem) {
-        MenuItemResponse menuItemResponse = new MenuItemResponse();
+
+    private MenuItemDTOResponse mapToDTO(MenuItem menuItem) {
+        MenuItemDTOResponse menuItemDTOResponse = new MenuItemDTOResponse();
         if(menuItem!=null){
-            menuItemResponse.setId(menuItem.getId());
+            menuItemDTOResponse.setId(menuItem.getId());
         }else{
-            menuItemResponse.setId(0);
+            menuItemDTOResponse.setId(0);
         }
-        menuItemResponse.setName(menuItem.getName());
-        menuItemResponse.setPrice(menuItem.getPrice());
-        menuItemResponse.setDescription(menuItem.getDescription());
-        menuItemResponse.setStatus(menuItem.getStatus());
-        menuItemResponse.setType(menuItem.getType());
-        menuItemResponse.setImage_path(menuItem.getImage_path());
-        menuItemResponse.setDate_added(menuItem.getDate_added());
-        return menuItemResponse;
+        menuItemDTOResponse.setName(menuItem.getName());
+        menuItemDTOResponse.setPrice(menuItem.getPrice());
+        menuItemDTOResponse.setDescription(menuItem.getDescription());
+        menuItemDTOResponse.setStatus(menuItem.getStatus());
+        menuItemDTOResponse.setType(menuItem.getType());
+        menuItemDTOResponse.setImage_path(menuItem.getImage_path());
+        menuItemDTOResponse.setDate_added(menuItem.getDate_added());
+        return menuItemDTOResponse;
     }
 
-    @Override
-    public MenuItem convertToEntity(MenuItemDTORequest menuItemDTORequest) {
+
+    private MenuItem mapToEntity(MenuItemDTORequest menuItemDTORequest) {
         MenuItem menuItem = new MenuItem();
-        if(menuItemDTORequest !=null){
-            menuItem.setId(menuItemDTORequest.getId());
-        }else{
-            menuItem.setId(0);
-        }
-        menuItem.setId(menuItemDTORequest.getId());
+        menuItem.setId(0); //Set Id as 0 to trigger auto increment
         menuItem.setName(menuItemDTORequest.getName());
         menuItem.setPrice(menuItemDTORequest.getPrice());
         menuItem.setDescription(menuItemDTORequest.getDescription());
@@ -105,14 +114,31 @@ public class MenuItemService implements IMenuItemService {
         return menuItem;
     }
 
+    private void updateEntityFromDTO(MenuItem menuItem, MenuItemDTORequest dtoRequest) {
+        menuItem.setName(dtoRequest.getName());
+        menuItem.setPrice(dtoRequest.getPrice());
+        menuItem.setDescription(dtoRequest.getDescription());
+        menuItem.setStatus(dtoRequest.getStatus());
+        menuItem.setType(dtoRequest.getType());
+        menuItem.setImage_path(dtoRequest.getImage_path());
+    }
 
+
+    @Override
     public String uploadImage(int menuItemID, MultipartFile file){
         System.out.println("Saving picture for menu");
-        MenuItem menuItem = getById(menuItemID);
+        Optional<MenuItem> result =menuItemRepository.findById(menuItemID);
+        MenuItem menuItem =null;
+        if(result.isPresent()){
+            menuItem=result.get();
+        }else{
+            throw new BadRequestException("Menu Item not found - ID: "+menuItemID);
+        }
         String image_URL = imageFunction(menuItemID,file);
         menuItem.setImage_path(image_URL);
         menuItemRepository.save(menuItem);
         return image_URL;
+
     }
 
     //Very complicated, taken from "Full Stack ReactJS with Spring Boot" video from Get Arrays

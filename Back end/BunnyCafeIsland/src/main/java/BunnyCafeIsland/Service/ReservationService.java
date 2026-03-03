@@ -1,11 +1,18 @@
 package BunnyCafeIsland.Service;
 
-import java.util.List;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 
+import BunnyCafeIsland.DTO.Request.MenuItemDTORequest;
+import BunnyCafeIsland.DTO.Request.ReservationDTORequest;
+import BunnyCafeIsland.DTO.Response.MenuItemDTOResponse;
+import BunnyCafeIsland.DTO.Response.ReservationDTOResponse;
+import BunnyCafeIsland.Entity.MenuItem;
 import BunnyCafeIsland.Service.Interface.IReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import BunnyCafeIsland.Entity.Reservation;
@@ -22,27 +29,91 @@ public class ReservationService implements IReservationService {
         this.reservationRepository = reservationRepository;
     }
 
-    public List<Reservation> getAllReservation(){
-        return reservationRepository.findAll();
-    }
-
-    public Reservation getReservationById(int id){
+    @Override
+    public ReservationDTOResponse getById(int id){
         Optional<Reservation> result =reservationRepository.findById(id);
-        Reservation aReservation =null;
+        Reservation reservation =null;
         if(result.isPresent()){
-            aReservation=result.get();
+            reservation=result.get();
         }else{
             throw new BadRequestException("Reservation not found - ID: "+id);
         }
-        return aReservation;
+        return mapToDTO(reservation);
     }
 
-    public Reservation save(Reservation aReservation){
-        return reservationRepository.save(aReservation);
+    @Override
+    public ReservationDTOResponse add(ReservationDTORequest dtoRequest) {
+        Reservation reservation = mapToEntity(dtoRequest);
+        Reservation addedReservation= reservationRepository.save(reservation);
+        return mapToDTO(addedReservation);
     }
 
-    public void deleteReservationById(int id){
+    @Override
+    public ReservationDTOResponse update(int reservationId, ReservationDTORequest dtoRequest) {
+        Reservation existingReservation = reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new BadRequestException("Reservation not found - ID: " + reservationId));
+
+        updateEntityFromDTO(existingReservation, dtoRequest);
+
+        Reservation updatedReservation= reservationRepository.save(existingReservation);
+        return mapToDTO(updatedReservation);
+    }
+
+
+
+    @Override
+    public Page<ReservationDTOResponse> getAllPageable(Pageable pageable){
+        Page<Reservation> reservationPage= reservationRepository.findAll(pageable);
+
+        //Convert to DTO Response page
+        return reservationPage.map(this::mapToDTO);
+    }
+
+    @Override
+    public void delete(int id) {
         reservationRepository.deleteById(id);
+    }
+
+
+    private ReservationDTOResponse mapToDTO(Reservation reservation) {
+        ReservationDTOResponse reservationDTOResponse = new ReservationDTOResponse();
+        if(reservation!=null){
+            reservationDTOResponse.setId(reservation.getId());
+        }else{
+            reservationDTOResponse.setId(0);
+        }
+        reservationDTOResponse.setName(reservation.getName());
+        reservationDTOResponse.setPhoneNumber(reservation.getPhone());
+        reservationDTOResponse.setStatus(reservation.getStatus());
+        reservationDTOResponse.setComment(reservation.getComment());
+        reservationDTOResponse.setExpectedDate(reservation.getExpectedDate());
+        reservationDTOResponse.setExpectedTime(reservation.getExpectedTime());
+        reservationDTOResponse.setTableNumber(reservation.getTableNumber());
+        return reservationDTOResponse;
+    }
+
+
+    private Reservation mapToEntity(ReservationDTORequest reservationDTORequest) {
+        Reservation reservation = new Reservation();
+        reservation.setId(0); //Set Id as 0 to trigger auto increment
+        reservation.setName(reservationDTORequest.getName());
+        reservation.setPhone(reservationDTORequest.getPhoneNumber());
+        reservation.setStatus(reservationDTORequest.getStatus());
+        reservation.setComment(reservationDTORequest.getComment());
+        reservation.setExpectedDate(reservationDTORequest.getExpectedDate());
+        reservation.setExpectedTime(reservationDTORequest.getExpectedTime());
+        reservation.setTableNumber(reservationDTORequest.getTableNumber());
+        return reservation;
+    }
+
+    private void updateEntityFromDTO(Reservation reservation, ReservationDTORequest dtoRequest) {
+        reservation.setName(dtoRequest.getName());
+        reservation.setPhone(dtoRequest.getPhoneNumber());
+        reservation.setStatus(dtoRequest.getStatus());
+        reservation.setComment(dtoRequest.getComment());
+        reservation.setExpectedDate(dtoRequest.getExpectedDate());
+        reservation.setExpectedTime(dtoRequest.getExpectedTime());
+        reservation.setTableNumber(dtoRequest.getTableNumber());
     }
 
 }

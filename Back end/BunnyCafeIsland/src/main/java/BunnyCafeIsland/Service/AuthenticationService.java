@@ -2,7 +2,7 @@ package BunnyCafeIsland.Service;
 
 import BunnyCafeIsland.DTO.Request.AuthenticationRequest;
 import BunnyCafeIsland.DTO.Response.AuthenticationResponse;
-import BunnyCafeIsland.DTO.Response.UserInfoResponse;
+import BunnyCafeIsland.DTO.Response.StaffInfoDTOResponse;
 import BunnyCafeIsland.Service.Interface.IAuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,14 +17,12 @@ import BunnyCafeIsland.Repository.StaffRepository;
 public class AuthenticationService implements IAuthenticationService {
 
     private final StaffRepository staffRepository;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
 	@Autowired
-	public AuthenticationService(StaffRepository staffRepository, BCryptPasswordEncoder bCryptPasswordEncoder, JwtService jwtService, AuthenticationManager authenticationManager){
+	public AuthenticationService(StaffRepository staffRepository, JwtService jwtService, AuthenticationManager authenticationManager){
 		this.staffRepository=staffRepository;
-        this.bCryptPasswordEncoder=bCryptPasswordEncoder;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
     }
@@ -37,7 +35,7 @@ public class AuthenticationService implements IAuthenticationService {
 
         var JwtToken = jwtService.createTokenForUser(user);
 
-        UserInfoResponse userInfoResponse = new UserInfoResponse(
+        StaffInfoDTOResponse staffInfoDTOResponse = new StaffInfoDTOResponse(
                 user.getEmail(),
                 user.getName(),
                 user.getPhone(),
@@ -47,7 +45,7 @@ public class AuthenticationService implements IAuthenticationService {
 
         return AuthenticationResponse.builder()
                 .token(JwtToken)
-                .userInfo(userInfoResponse)
+                .userInfo(staffInfoDTOResponse)
                 .build();
     }
 
